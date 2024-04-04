@@ -16,11 +16,11 @@ public class RecompensaModel {
     @Column(name="id")
     private int id;
 
-    @NotBlank(message = "A descrição da recompensa é requerida.")
+    @NotBlank(message = "A descrição da recompensa é requerida")
     @Column(name="descricao_recompensa")
     private String descricao_recompensa;
 
-    @NotNull(message = "O valor da recompensa é requerida.")
+    @NotNull(message = "O valor da recompensa é requerida")
     @DecimalMin(value = "0.00", message = "O valor deve ser no mínimo R$ 0,00")
     @DecimalMax(value = "1000000.00", message = "O valor deve ser no máximo R$ 1.000.000,00")
     @Column(name="valor_recompensa")
@@ -56,7 +56,7 @@ public class RecompensaModel {
 
     public void setDeletedAt(LocalDateTime deleted_at) { this.deleted_at = deleted_at; }
 
-    public String getValorRecompensaFormatado() {
+    public String valorRecompensaFormatado() {
         NumberFormat format = DecimalFormat.getCurrencyInstance(new Locale("pt", "BR"));
         return format.format(this.getValor_recompensa());
     }

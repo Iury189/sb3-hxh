@@ -14,7 +14,7 @@ public class TipoSanguineoModel {
     @Column(name="id")
     private int id;
 
-    @NotBlank(message = "A descrição do tipo sanguíneo é requerida.")
+    @NotBlank(message = "A descrição do tipo sanguíneo é requerida")
     @Column(name="descricao")
     private String descricao;
 

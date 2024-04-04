@@ -36,20 +36,49 @@ public class RecompensadoController {
         RecompensadoModel recompesadoModel = new RecompensadoModel();
         List<HunterModel> hunterModel = hunterService.index();
         List<RecompensaModel> recompensaModel = recompensaService.index();
+        List<RecompensaModel> recompensasDisponiveis = new ArrayList<>();
+        for (RecompensaModel recompensa : recompensaModel) {
+            boolean jaAssociado = false;
+            for (RecompensadoModel recompensado : recompensadoService.index()) {
+                if (recompensado.getRecompensa_id().equals(recompensa)) {
+                    jaAssociado = true;
+                    break;
+                }
+            }
+            if (!jaAssociado) {
+                recompensasDisponiveis.add(recompensa);
+            }
+        }
         model.addAttribute("recompensado", recompesadoModel);
         model.addAttribute("hunter", hunterModel);
-        model.addAttribute("recompensa", recompensaModel);
+        model.addAttribute("recompensa", recompensasDisponiveis);
         return "/recompensado/create-recompensado";
     }
 
     @PostMapping("/create-recompensado")
-    public String createRecompensado(@ModelAttribute("recompensado") @Valid RecompensadoModel recompensadoModel, BindingResult bindingResult) {
-        System.out.println(recompensadoModel);
+    public String createRecompensado(@ModelAttribute("recompensado") @Valid RecompensadoModel recompensadoModel, BindingResult bindingResult, Model model) {
+        List<HunterModel> hunterModel = hunterService.index();
+        List<RecompensaModel> recompensaModel = recompensaService.index();
+        List<RecompensaModel> recompensasDisponiveis = new ArrayList<>();
+        for (RecompensaModel recompensa : recompensaModel) {
+            boolean jaAssociado = false;
+            for (RecompensadoModel recompensado : recompensadoService.index()) {
+                if (recompensado.getRecompensa_id().equals(recompensa)) {
+                    jaAssociado = true;
+                    break;
+                }
+            }
+            if (!jaAssociado) {
+                recompensasDisponiveis.add(recompensa);
+            }
+        }
+        model.addAttribute("hunter", hunterModel);
+        model.addAttribute("recompensa", recompensasDisponiveis);
         if (bindingResult.hasErrors()) {
             return "/recompensado/create-recompensado";
         } else {
             recompensadoService.create(recompensadoModel);
-            return "redirect:/recompensados/recompensado";
+            return "redirect:/recompensados/list";
         }
     }
 
@@ -58,10 +87,23 @@ public class RecompensadoController {
         RecompensadoModel recompensadoModel = recompensadoService.read(id);
         List<HunterModel> hunterModel = hunterService.index();
         List<RecompensaModel> recompensaModel = recompensaService.index();
+        List<RecompensaModel> recompensasDisponiveis = new ArrayList<>();
+        for (RecompensaModel recompensa : recompensaModel) {
+            boolean jaAssociado = false;
+            for (RecompensadoModel recompensado : recompensadoService.index()) {
+                if (recompensado.getRecompensa_id().equals(recompensa)) {
+                    jaAssociado = true;
+                    break;
+                }
+            }
+            if (!jaAssociado) {
+                recompensasDisponiveis.add(recompensa);
+            }
+        }
+        model.addAttribute("recompensado", recompensadoModel);
+        model.addAttribute("hunter", hunterModel);
+        model.addAttribute("recompensa", recompensasDisponiveis);
         if (recompensadoModel != null) {
-            model.addAttribute("recompensado", recompensadoModel);
-            model.addAttribute("hunter", hunterModel);
-            model.addAttribute("recompensa", recompensaModel);
             return "/recompensado/update-recompensado";
         } else {
             return "redirect:/recompensados/list";
@@ -69,7 +111,24 @@ public class RecompensadoController {
     }
 
     @PostMapping("/update-recompensados/{id}")
-    public String updateRecompensado(@PathVariable("id") int id, @ModelAttribute("recompensado") @Valid RecompensadoModel recompensadoModel, BindingResult bindingResult) {
+    public String updateRecompensado(@PathVariable("id") int id, @ModelAttribute("recompensado") @Valid RecompensadoModel recompensadoModel, BindingResult bindingResult, Model model) {
+        List<HunterModel> hunterModel = hunterService.index();
+        List<RecompensaModel> recompensaModel = recompensaService.index();
+        List<RecompensaModel> recompensasDisponiveis = new ArrayList<>();
+        for (RecompensaModel recompensa : recompensaModel) {
+            boolean jaAssociado = false;
+            for (RecompensadoModel recompensado : recompensadoService.index()) {
+                if (recompensado.getRecompensa_id().equals(recompensa)) {
+                    jaAssociado = true;
+                    break;
+                }
+            }
+            if (!jaAssociado) {
+                recompensasDisponiveis.add(recompensa);
+            }
+        }
+        model.addAttribute("hunter", hunterModel);
+        model.addAttribute("recompensa", recompensasDisponiveis);
         if (bindingResult.hasErrors()) {
             return "/recompensado/update-recompensado";
         } else {
@@ -79,7 +138,7 @@ public class RecompensadoController {
         }
     }
 
-    @GetMapping("/trash-recompensados/{id}")
+    @GetMapping("/trash-recompensado/{id}")
     public String trashRecompensado(@PathVariable("id") int id) {
         recompensadoService.trash(id);
         return "redirect:/recompensados/list";

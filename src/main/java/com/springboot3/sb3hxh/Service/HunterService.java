@@ -1,7 +1,7 @@
 package com.springboot3.sb3hxh.Service;
 
-import com.springboot3.sb3hxh.DAO.HunterDAO;
-import com.springboot3.sb3hxh.Model.HunterModel;
+import com.springboot3.sb3hxh.DAO.*;
+import com.springboot3.sb3hxh.Model.*;
 import jakarta.persistence.*;
 import jakarta.transaction.*;
 import org.springframework.stereotype.*;
@@ -21,7 +21,12 @@ public class HunterService implements HunterDAO {
 
     @Override
     public List<HunterModel> index() {
-        TypedQuery<HunterModel> query = entityManager.createQuery("SELECT r FROM HunterModel r WHERE r.deleted_at IS NULL", HunterModel.class);
+        TypedQuery<HunterModel> query = entityManager.createQuery("SELECT h FROM HunterModel h " +
+                "INNER JOIN FETCH h.tipo_hunter_id th " +
+                "INNER JOIN FETCH h.tipo_nen_id tn " +
+                "INNER JOIN FETCH h.tipo_sanguineo_id ts " +
+                "WHERE h.deleted_at IS NULL " +
+                "ORDER BY h.id ASC", HunterModel.class);
         return query.getResultList();
     }
 
@@ -56,7 +61,12 @@ public class HunterService implements HunterDAO {
 
     @Override
     public List<HunterModel> indexTrash() {
-        TypedQuery<HunterModel> query = entityManager.createQuery("SELECT r FROM HunterModel r WHERE r.deleted_at IS NOT NULL", HunterModel.class);
+        TypedQuery<HunterModel> query = entityManager.createQuery("SELECT h FROM HunterModel h " +
+                "INNER JOIN FETCH h.tipo_hunter_id th " +
+                "INNER JOIN FETCH h.tipo_nen_id tn " +
+                "INNER JOIN FETCH h.tipo_sanguineo_id ts " +
+                "WHERE h.deleted_at IS NOT NULL " +
+                "ORDER BY h.id ASC", HunterModel.class);
         return query.getResultList();
     }
 

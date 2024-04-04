@@ -14,7 +14,7 @@ public class TipoNenModel {
     @Column(name="id")
     private int id;
 
-    @NotBlank(message = "A descrição do tipo de nen é requerida.")
+    @NotBlank(message = "A descrição do tipo de Nen é requerida")
     @Column(name="descricao")
     private String descricao;
 

@@ -19,17 +19,20 @@
         <thead class="table-dark">
             <tr>
                 <th>ID</th>
-                <th>Descrição</th>
+                <th>Hunter</th>
+                <th>Recompensa</th>
                 <th>Valor</th>
+                <th>Status</th>
                 <th>Ações</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="recompensado : ${recompensados}">
                 <td th:text="${recompensado.id}"></td>
-                <td th:text="${recompensado.hunter_id}"></td>
-                <td th:text="${recompensado.recompensa_id}"></td>
-                <td th:text="${recompensado.status}"></td>
+                <td th:text="${recompensado.hunter_id.nome_hunter}"></td>
+                <td th:text="${recompensado.recompensa_id.descricao_recompensa}"></td>
+                <td th:text="${recompensado.recompensa_id.valorRecompensaFormatado}"></td>
+                <td th:text="${recompensado.verificarStatus}"></td>
                 <td>
                     <a th:href="@{'/recompensados/trash-recompensado/' + ${recompensado.id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>&nbsp;Lixeira</a>
                 </td>

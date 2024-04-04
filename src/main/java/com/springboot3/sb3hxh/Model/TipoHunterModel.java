@@ -14,7 +14,7 @@ public class TipoHunterModel {
     @Column(name="id")
     private int id;
 
-    @NotBlank(message = "A descrição do tipo de hunter é requerida.")
+    @NotBlank(message = "A descrição do tipo de Hunter é requerida")
     @Column(name="descricao")
     private String descricao;
 

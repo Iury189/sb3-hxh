@@ -20,7 +20,7 @@
         <label>Hunter:</label>
         <select th:field="*{hunter_id}" class="form-control mb-4 w-25">
             <option value="">Escolha um Hunter</option>
-            <option th:each="h : ${hunter}" th:value="${h.id}" th:text="${h.id}"></option>
+            <option th:each="h : ${hunter}" th:value="${h.id}" th:text="${h.nome_hunter}"></option>
         </select>
         <div th:if="${#fields.hasErrors('hunter_id')}" th:errors="*{hunter_id}" class="text-danger"></div>
 

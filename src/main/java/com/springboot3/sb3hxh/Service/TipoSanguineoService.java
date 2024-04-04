@@ -1,7 +1,7 @@
 package com.springboot3.sb3hxh.Service;
 
-import com.springboot3.sb3hxh.DAO.TipoSanguineoDAO;
-import com.springboot3.sb3hxh.Model.TipoSanguineoModel;
+import com.springboot3.sb3hxh.DAO.*;
+import com.springboot3.sb3hxh.Model.*;
 import jakarta.persistence.*;
 import org.springframework.stereotype.*;
 
@@ -19,7 +19,7 @@ public class TipoSanguineoService implements TipoSanguineoDAO {
 
     @Override
     public List<TipoSanguineoModel> index() {
-        TypedQuery<TipoSanguineoModel> query = entityManager.createQuery("SELECT r FROM TipoSanguineoModel r WHERE r.deleted_at IS NULL", TipoSanguineoModel.class);
+        TypedQuery<TipoSanguineoModel> query = entityManager.createQuery("SELECT r FROM TipoSanguineoModel r WHERE r.deleted_at IS NULL ORDER BY r.id ASC", TipoSanguineoModel.class);
         return query.getResultList();
     }
 

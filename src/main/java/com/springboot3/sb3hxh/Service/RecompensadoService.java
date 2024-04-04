@@ -1,7 +1,7 @@
 package com.springboot3.sb3hxh.Service;
 
-import com.springboot3.sb3hxh.DAO.RecompensadoDAO;
-import com.springboot3.sb3hxh.Model.RecompensadoModel;
+import com.springboot3.sb3hxh.DAO.*;
+import com.springboot3.sb3hxh.Model.*;
 import jakarta.persistence.*;
 import jakarta.transaction.*;
 import org.springframework.stereotype.*;
@@ -21,7 +21,12 @@ public class RecompensadoService implements RecompensadoDAO {
 
     @Override
     public List<RecompensadoModel> index() {
-        TypedQuery<RecompensadoModel> query = entityManager.createQuery("SELECT r FROM RecompensadoModel r WHERE r.deleted_at IS NULL", RecompensadoModel.class);
+        TypedQuery<RecompensadoModel> query = entityManager.createQuery("SELECT re FROM RecompensadoModel re " +
+                        "INNER JOIN FETCH re.hunter_id h " +
+                        "INNER JOIN FETCH re.recompensa_id r " +
+                        "WHERE re.deleted_at IS NULL " +
+                        "ORDER BY re.id ASC",
+                RecompensadoModel.class);
         return query.getResultList();
     }
 
@@ -56,7 +61,11 @@ public class RecompensadoService implements RecompensadoDAO {
 
     @Override
     public List<RecompensadoModel> indexTrash() {
-        TypedQuery<RecompensadoModel> query = entityManager.createQuery("SELECT r FROM RecompensadoModel r WHERE r.deleted_at IS NOT NULL", RecompensadoModel.class);
+        TypedQuery<RecompensadoModel> query = entityManager.createQuery("SELECT re FROM RecompensadoModel re " +
+                "INNER JOIN FETCH re.hunter_id h " +
+                "INNER JOIN FETCH re.recompensa_id r " +
+                "WHERE re.deleted_at IS NOT NULL " +
+                "ORDER BY re.id ASC", RecompensadoModel.class);
         return query.getResultList();
     }
 

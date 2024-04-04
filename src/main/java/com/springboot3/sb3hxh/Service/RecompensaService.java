@@ -1,7 +1,7 @@
 package com.springboot3.sb3hxh.Service;
 
-import com.springboot3.sb3hxh.DAO.RecompensaDAO;
-import com.springboot3.sb3hxh.Model.RecompensaModel;
+import com.springboot3.sb3hxh.DAO.*;
+import com.springboot3.sb3hxh.Model.*;
 import jakarta.persistence.*;
 import org.springframework.stereotype.*;
 import jakarta.transaction.*;
@@ -21,7 +21,7 @@ public class RecompensaService implements RecompensaDAO {
 
     @Override
     public List<RecompensaModel> index() {
-        TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r WHERE r.deleted_at IS NULL", RecompensaModel.class);
+        TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r WHERE r.deleted_at IS NULL ORDER BY r.id ASC", RecompensaModel.class);
         return query.getResultList();
     }
 
@@ -56,7 +56,7 @@ public class RecompensaService implements RecompensaDAO {
 
     @Override
     public List<RecompensaModel> indexTrash() {
-        TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r WHERE r.deleted_at IS NOT NULL", RecompensaModel.class);
+        TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r WHERE r.deleted_at IS NOT NULL ORDER BY r.id ASC", RecompensaModel.class);
         return query.getResultList();
     }
 

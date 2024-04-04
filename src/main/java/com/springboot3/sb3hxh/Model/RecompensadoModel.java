@@ -15,16 +15,16 @@ public class RecompensadoModel {
     private int id;
 
     @OneToOne
-    @NotNull(message = "Hunter é requerido.")
+    @NotNull(message = "Hunter é requerido")
     @JoinColumn(name="hunter_id", referencedColumnName="id")
     private HunterModel hunter_id;
 
     @OneToOne
-    @NotNull(message = "Recompensa é requerido.")
+    @NotNull(message = "Recompensa é requerida")
     @JoinColumn(name="recompensa_id", referencedColumnName="id")
     private RecompensaModel recompensa_id;
 
-    @NotNull(message = "Status do recompensado é requerido")
+    @AssertTrue(message = "O status do recompensado é requerido")
     @Column(name="status")
     private Boolean status;
 
@@ -60,5 +60,9 @@ public class RecompensadoModel {
     public LocalDateTime getDeleted_at() { return deleted_at; }
 
     public void setDeleted_at(LocalDateTime deleted_at) { this.deleted_at = deleted_at; }
+
+    public String verificarStatus() {
+        return status ? "Concluído" : "Não concluído";
+    }
 
 }

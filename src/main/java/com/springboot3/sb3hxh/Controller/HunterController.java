@@ -47,8 +47,13 @@ public class HunterController {
     }
 
     @PostMapping("/create-hunter")
-    public String createHunter(@ModelAttribute("hunter") @Valid HunterModel hunterModel, BindingResult bindingResult) {
-        System.out.println(hunterModel);
+    public String createHunter(@ModelAttribute("hunter") @Valid HunterModel hunterModel, BindingResult bindingResult, Model model) {
+        List<TipoHunterModel> tipoHunterModel = tipoHunterService.index();
+        List<TipoNenModel> tipoNenModel = tipoNenService.index();
+        List<TipoSanguineoModel> tipoSanguineoModel = tipoSanguineoService.index();
+        model.addAttribute("tipo_hunter", tipoHunterModel);
+        model.addAttribute("tipo_nen", tipoNenModel);
+        model.addAttribute("tipo_sanguineo", tipoSanguineoModel);
         if (bindingResult.hasErrors()) {
             return "/hunter/create-hunter";
         } else {
@@ -63,11 +68,11 @@ public class HunterController {
         List<TipoHunterModel> tipoHunterModel = tipoHunterService.index();
         List<TipoNenModel> tipoNenModel = tipoNenService.index();
         List<TipoSanguineoModel> tipoSanguineoModel = tipoSanguineoService.index();
+        model.addAttribute("hunter", hunterModel);
+        model.addAttribute("tipo_hunter", tipoHunterModel);
+        model.addAttribute("tipo_nen", tipoNenModel);
+        model.addAttribute("tipo_sanguineo", tipoSanguineoModel);
         if (hunterModel != null) {
-            model.addAttribute("hunter", hunterModel);
-            model.addAttribute("tipo_hunter", tipoHunterModel);
-            model.addAttribute("tipo_nen", tipoNenModel);
-            model.addAttribute("tipo_sanguineo", tipoSanguineoModel);
             return "/hunter/update-hunter";
         } else {
             return "redirect:/hunters/list";
@@ -75,7 +80,13 @@ public class HunterController {
     }
 
     @PostMapping("/update-hunter/{id}")
-    public String updateHunter(@PathVariable("id") int id, @ModelAttribute("hunter") @Valid HunterModel hunterModel, BindingResult bindingResult) {
+    public String updateHunter(@PathVariable("id") int id, @ModelAttribute("hunter") @Valid HunterModel hunterModel, BindingResult bindingResult, Model model) {
+        List<TipoHunterModel> tipoHunterModel = tipoHunterService.index();
+        List<TipoNenModel> tipoNenModel = tipoNenService.index();
+        List<TipoSanguineoModel> tipoSanguineoModel = tipoSanguineoService.index();
+        model.addAttribute("tipo_hunter", tipoHunterModel);
+        model.addAttribute("tipo_nen", tipoNenModel);
+        model.addAttribute("tipo_sanguineo", tipoSanguineoModel);
         if (bindingResult.hasErrors()) {
             return "/hunter/update-hunter";
         } else {

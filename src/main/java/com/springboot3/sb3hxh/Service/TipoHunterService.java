@@ -1,7 +1,7 @@
 package com.springboot3.sb3hxh.Service;
 
-import com.springboot3.sb3hxh.DAO.TipoHunterDAO;
-import com.springboot3.sb3hxh.Model.TipoHunterModel;
+import com.springboot3.sb3hxh.DAO.*;
+import com.springboot3.sb3hxh.Model.*;
 import jakarta.persistence.*;
 import org.springframework.stereotype.*;
 
@@ -19,7 +19,7 @@ public class TipoHunterService implements TipoHunterDAO {
 
     @Override
     public List<TipoHunterModel> index() {
-        TypedQuery<TipoHunterModel> query = entityManager.createQuery("SELECT r FROM TipoHunterModel r WHERE r.deleted_at IS NULL", TipoHunterModel.class);
+        TypedQuery<TipoHunterModel> query = entityManager.createQuery("SELECT r FROM TipoHunterModel r WHERE r.deleted_at IS NULL ORDER BY r.id ASC", TipoHunterModel.class);
         return query.getResultList();
     }
 
