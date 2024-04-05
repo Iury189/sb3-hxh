@@ -14,5 +14,7 @@ public interface RecompensadoDAO {
     List<RecompensadoModel> indexTrash();
     RecompensadoModel restore(int id);
     void delete(int id);
+    List<RecompensadoModel> searchRecompensado(String search);
+    List<RecompensadoModel> searchRecompensadoTrash(String search);
 
 }

@@ -14,5 +14,7 @@ public interface HunterDAO {
     List<HunterModel> indexTrash();
     HunterModel restore(int id);
     void delete(int id);
+    List<HunterModel> searchHunter(String search);
+    List<HunterModel> searchHunterTrash(String search);
 
 }

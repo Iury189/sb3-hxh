@@ -19,7 +19,7 @@ public class TipoHunterService implements TipoHunterDAO {
 
     @Override
     public List<TipoHunterModel> index() {
-        TypedQuery<TipoHunterModel> query = entityManager.createQuery("SELECT r FROM TipoHunterModel r WHERE r.deleted_at IS NULL ORDER BY r.id ASC", TipoHunterModel.class);
+        TypedQuery<TipoHunterModel> query = entityManager.createQuery("SELECT th FROM TipoHunterModel th WHERE th.deleted_at IS NULL ORDER BY th.id ASC", TipoHunterModel.class);
         return query.getResultList();
     }
 

@@ -19,7 +19,7 @@ public class TipoSanguineoService implements TipoSanguineoDAO {
 
     @Override
     public List<TipoSanguineoModel> index() {
-        TypedQuery<TipoSanguineoModel> query = entityManager.createQuery("SELECT r FROM TipoSanguineoModel r WHERE r.deleted_at IS NULL ORDER BY r.id ASC", TipoSanguineoModel.class);
+        TypedQuery<TipoSanguineoModel> query = entityManager.createQuery("SELECT ts FROM TipoSanguineoModel ts WHERE ts.deleted_at IS NULL ORDER BY ts.id ASC", TipoSanguineoModel.class);
         return query.getResultList();
     }
 

@@ -27,6 +27,18 @@ public class RecompensaController {
         return "/recompensa/list-recompensas";
     }
 
+    @GetMapping("/filtrar-recompensa")
+    public String filtrarRecompensa(@RequestParam(name = "search", required = false) String search, Model model){
+        List<RecompensaModel> recompensaModel;
+        if (search != null && !search.isEmpty()) {
+            recompensaModel = recompensaService.searchRecompensa(search);
+        } else {
+            recompensaModel = recompensaService.index();
+        }
+        model.addAttribute("recompensas", recompensaModel);
+        return "/recompensa/list-recompensas";
+    }
+
     @GetMapping("/form-create-recompensa")
     public String formCreateRecompensa(Model model){
         RecompensaModel recompensaModel = new RecompensaModel();
@@ -78,6 +90,18 @@ public class RecompensaController {
     @GetMapping("/trash-list-recompensa")
     public String listarTrashRecompensas(Model model){
         List<RecompensaModel> recompensaModel = recompensaService.indexTrash();
+        model.addAttribute("recompensas", recompensaModel);
+        return "/recompensa/trash-recompensa";
+    }
+
+    @GetMapping("/filtrar-recompensa-trash")
+    public String filtrarRecompensaTrash(@RequestParam(name = "search", required = false) String search, Model model){
+        List<RecompensaModel> recompensaModel;
+        if (search != null && !search.isEmpty()) {
+            recompensaModel = recompensaService.searchRecompensaTrash(search);
+        } else {
+            recompensaModel = recompensaService.indexTrash();
+        }
         model.addAttribute("recompensas", recompensaModel);
         return "/recompensa/trash-recompensa";
     }

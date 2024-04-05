@@ -14,6 +14,12 @@
     <h3>Lixeira de Hunters</h3>
     <hr>
     <a href="/hunters/list" class="btn btn-secondary btn-sm mb-3"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
+    <form th:action="@{/hunters/filtrar-hunter-trash}" method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar nome do Hunter" name="search">
+            <button type="submit" class="btn btn-primary"><i class="fa fa-magnifying-glass"></i>&nbsp;Buscar</button>
+        </div>
+    </form>
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
@@ -43,8 +49,8 @@
             <td th:text="${hunter.inicioFormatado}"></td>
             <td th:text="${hunter.terminoFormatado}"></td>
             <td>
-                <a th:href="@{'/hunters/restore-hunter/' + ${hunter.id}}" class="btn btn-primary btn-sm">Restaurar</a>
-                <a th:href="@{'/hunters/delete-hunter/' + ${hunter.id}}" class="btn btn-danger btn-sm">Deletar</a>
+                <a th:href="@{'/hunters/restore-hunter/' + ${hunter.id}}" class="btn btn-primary btn-sm"><i class="fa fa-arrows-rotate"></i>&nbsp;Restaurar</a>
+                <a th:href="@{'/hunters/delete-hunter/' + ${hunter.id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>&nbsp;Deletar</a>
             </td>
         </tr>
         </tbody>

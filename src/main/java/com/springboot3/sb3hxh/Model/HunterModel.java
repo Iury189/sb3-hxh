@@ -135,7 +135,7 @@ public class HunterModel {
 
     public String inicioFormatado() {
         if (this.getInicio() != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             return sdf.format(this.getInicio());
         } else {
             return "";
@@ -144,7 +144,7 @@ public class HunterModel {
 
     public String terminoFormatado() {
         if (this.getTermino() != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             return sdf.format(this.getTermino());
         } else {
             return "";

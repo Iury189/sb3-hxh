@@ -14,6 +14,12 @@
     <h3>Lixeira de recompensados</h3>
     <hr>
     <a href="/recompensados/list" class="btn btn-secondary btn-sm mb-3"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
+    <form th:action="@{/recompensados/filtrar-recompensado-trash}" method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar nome do Hunter ou descrição da recompensa" name="search">
+            <button type="submit" class="btn btn-primary"><i class="fa fa-magnifying-glass"></i>&nbsp;Buscar</button>
+        </div>
+    </form>
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
@@ -33,8 +39,8 @@
             <td th:text="${recompensado.recompensa_id.valorRecompensaFormatado}"></td>
             <td th:text="${recompensado.verificarStatus}"></td>
             <td>
-                <a th:href="@{'/recompensados/restore-recompensado/' + ${recompensado.id}}" class="btn btn-primary btn-sm">Restaurar</a>
-                <a th:href="@{'/recompensados/delete-recompensado/' + ${recompensado.id}}" class="btn btn-danger btn-sm">Deletar</a>
+                <a th:href="@{'/recompensados/restore-recompensado/' + ${recompensado.id}}" class="btn btn-primary btn-sm"><i class="fa fa-arrows-rotate"></i>&nbsp;Restaurar</a>
+                <a th:href="@{'/recompensados/delete-recompensado/' + ${recompensado.id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>&nbsp;Deletar</a>
             </td>
         </tr>
         </tbody>

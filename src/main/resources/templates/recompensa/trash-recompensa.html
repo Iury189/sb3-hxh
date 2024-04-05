@@ -14,6 +14,12 @@
     <h3>Lixeira de recompensas</h3>
     <hr>
     <a href="/recompensas/list" class="btn btn-secondary btn-sm mb-3"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
+    <form th:action="@{/recompensas/filtrar-recompensa-trash}" method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar descrição da recompensa" name="search">
+            <button type="submit" class="btn btn-primary"><i class="fa fa-magnifying-glass"></i>&nbsp;Buscar</button>
+        </div>
+    </form>
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
@@ -29,8 +35,8 @@
             <td th:text="${recompensa.descricao_recompensa}"></td>
             <td th:text="${recompensa.valorRecompensaFormatado}"></td>
             <td>
-                <a th:href="@{'/recompensas/restore-recompensa/' + ${recompensa.id}}" class="btn btn-primary btn-sm">Restaurar</a>
-                <a th:href="@{'/recompensas/delete-recompensa/' + ${recompensa.id}}" class="btn btn-danger btn-sm">Deletar</a>
+                <a th:href="@{'/recompensas/restore-recompensa/' + ${recompensa.id}}" class="btn btn-primary btn-sm"><i class="fa fa-arrows-rotate"></i>&nbsp;Restaurar</a>
+                <a th:href="@{'/recompensas/delete-recompensa/' + ${recompensa.id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>&nbsp;Deletar</a>
             </td>
         </tr>
         </tbody>

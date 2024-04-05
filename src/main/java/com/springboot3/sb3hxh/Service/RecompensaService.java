@@ -25,6 +25,15 @@ public class RecompensaService implements RecompensaDAO {
         return query.getResultList();
     }
 
+    public List<RecompensaModel> searchRecompensa(String search) {
+        TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r " +
+                "WHERE r.deleted_at IS NULL " +
+                "AND LOWER(r.descricao_recompensa) LIKE LOWER(:search) " +
+                "ORDER BY r.id ASC", RecompensaModel.class);
+        query.setParameter("search", "%" + search + "%");
+        return query.getResultList();
+    }
+
     @Override
     @Transactional
     public RecompensaModel create(RecompensaModel theRecompensaModel) {
@@ -57,6 +66,15 @@ public class RecompensaService implements RecompensaDAO {
     @Override
     public List<RecompensaModel> indexTrash() {
         TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r WHERE r.deleted_at IS NOT NULL ORDER BY r.id ASC", RecompensaModel.class);
+        return query.getResultList();
+    }
+
+    public List<RecompensaModel> searchRecompensaTrash(String search) {
+        TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r " +
+                "WHERE r.deleted_at IS NOT NULL " +
+                "AND LOWER(r.descricao_recompensa) LIKE LOWER(:search) " +
+                "ORDER BY r.id ASC", RecompensaModel.class);
+        query.setParameter("search", "%" + search + "%");
         return query.getResultList();
     }
 

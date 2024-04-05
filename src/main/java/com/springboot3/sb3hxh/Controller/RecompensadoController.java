@@ -31,6 +31,18 @@ public class RecompensadoController {
         return "/recompensado/list-recompensados";
     }
 
+    @GetMapping("/filtrar-recompensado")
+    public String filtrarRecompensado(@RequestParam(name = "search", required = false) String search, Model model){
+        List<RecompensadoModel> recompensadoModel;
+        if (search != null && !search.isEmpty()) {
+            recompensadoModel = recompensadoService.searchRecompensado(search);
+        } else {
+            recompensadoModel = recompensadoService.index();
+        }
+        model.addAttribute("recompensados", recompensadoModel);
+        return "/recompensado/list-recompensados";
+    }
+
     @GetMapping("/form-create-recompensado")
     public String formCreateRecompensado(Model model){
         RecompensadoModel recompesadoModel = new RecompensadoModel();
@@ -147,6 +159,18 @@ public class RecompensadoController {
     @GetMapping("/trash-list-recompensado")
     public String listarTrashRecompensados(Model model){
         List<RecompensadoModel> recompensadoModel = recompensadoService.indexTrash();
+        model.addAttribute("recompensados", recompensadoModel);
+        return "/recompensado/trash-recompensado";
+    }
+
+    @GetMapping("/filtrar-recompensado-trash")
+    public String filtrarRecompensadoTrash(@RequestParam(name = "search", required = false) String search, Model model){
+        List<RecompensadoModel> recompensadoModel;
+        if (search != null && !search.isEmpty()) {
+            recompensadoModel = recompensadoService.searchRecompensadoTrash(search);
+        } else {
+            recompensadoModel = recompensadoService.indexTrash();
+        }
         model.addAttribute("recompensados", recompensadoModel);
         return "/recompensado/trash-recompensado";
     }

@@ -25,8 +25,19 @@ public class RecompensadoService implements RecompensadoDAO {
                         "INNER JOIN FETCH re.hunter_id h " +
                         "INNER JOIN FETCH re.recompensa_id r " +
                         "WHERE re.deleted_at IS NULL " +
-                        "ORDER BY re.id ASC",
-                RecompensadoModel.class);
+                        "ORDER BY re.id ASC", RecompensadoModel.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<RecompensadoModel> searchRecompensado(String search) {
+        TypedQuery<RecompensadoModel> query = entityManager.createQuery("SELECT re FROM RecompensadoModel re " +
+                "INNER JOIN FETCH re.hunter_id h " +
+                "INNER JOIN FETCH re.recompensa_id r " +
+                "WHERE re.deleted_at IS NULL " +
+                "AND (LOWER(h.nome_hunter) LIKE LOWER(:search) OR LOWER(r.descricao_recompensa) LIKE LOWER(:search)) " +
+                "ORDER BY re.id ASC ", RecompensadoModel.class);
+        query.setParameter("search", "%" + search + "%");
         return query.getResultList();
     }
 
@@ -66,6 +77,18 @@ public class RecompensadoService implements RecompensadoDAO {
                 "INNER JOIN FETCH re.recompensa_id r " +
                 "WHERE re.deleted_at IS NOT NULL " +
                 "ORDER BY re.id ASC", RecompensadoModel.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<RecompensadoModel> searchRecompensadoTrash(String search) {
+        TypedQuery<RecompensadoModel> query = entityManager.createQuery("SELECT re FROM RecompensadoModel re " +
+                "INNER JOIN FETCH re.hunter_id h " +
+                "INNER JOIN FETCH re.recompensa_id r " +
+                "WHERE re.deleted_at IS NOT NULL " +
+                "AND (LOWER(h.nome_hunter) LIKE LOWER(:search) OR LOWER(r.descricao_recompensa) LIKE LOWER(:search)) " +
+                "ORDER BY re.id ASC ", RecompensadoModel.class);
+        query.setParameter("search", "%" + search + "%");
         return query.getResultList();
     }
 

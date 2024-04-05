@@ -19,7 +19,7 @@ public class TipoNenService implements TipoNenDAO {
 
     @Override
     public List<TipoNenModel> index() {
-        TypedQuery<TipoNenModel> query = entityManager.createQuery("SELECT r FROM TipoNenModel r WHERE r.deleted_at IS NULL ORDER BY r.id ASC", TipoNenModel.class);
+        TypedQuery<TipoNenModel> query = entityManager.createQuery("SELECT tn FROM TipoNenModel tn WHERE tn.deleted_at IS NULL ORDER BY tn.id ASC", TipoNenModel.class);
         return query.getResultList();
     }
 

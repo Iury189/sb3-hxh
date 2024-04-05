@@ -14,5 +14,7 @@ public interface RecompensaDAO {
     List<RecompensaModel> indexTrash();
     RecompensaModel restore(int id);
     void delete(int id);
+    List<RecompensaModel> searchRecompensa(String search);
+    List<RecompensaModel> searchRecompensaTrash(String search);
 
 }

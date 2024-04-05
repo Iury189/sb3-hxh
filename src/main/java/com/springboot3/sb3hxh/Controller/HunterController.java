@@ -33,6 +33,18 @@ public class HunterController {
         return "/hunter/list-hunters";
     }
 
+    @GetMapping("/filtrar-hunter")
+    public String filtrarHunter(@RequestParam(name = "search", required = false) String search, Model model){
+        List<HunterModel> hunterModel;
+        if (search != null && !search.isEmpty()) {
+            hunterModel = hunterService.searchHunter(search);
+        } else {
+            hunterModel = hunterService.index();
+        }
+        model.addAttribute("hunters", hunterModel);
+        return "/hunter/list-hunters";
+    }
+
     @GetMapping("/form-create-hunter")
     public String formCreateHunter(Model model){
         HunterModel hunterModel = new HunterModel();
@@ -105,6 +117,18 @@ public class HunterController {
     @GetMapping("/trash-list-hunter")
     public String listarTrashHunters(Model model){
         List<HunterModel> hunterModel = hunterService.indexTrash();
+        model.addAttribute("hunters", hunterModel);
+        return "/hunter/trash-hunter";
+    }
+
+    @GetMapping("/filtrar-hunter-trash")
+    public String filtrarHunterTrash(@RequestParam(name = "search", required = false) String search, Model model){
+        List<HunterModel> hunterModel;
+        if (search != null && !search.isEmpty()) {
+            hunterModel = hunterService.searchHunterTrash(search);
+        } else {
+            hunterModel = hunterService.indexTrash();
+        }
         model.addAttribute("hunters", hunterModel);
         return "/hunter/trash-hunter";
     }

@@ -31,6 +31,19 @@ public class HunterService implements HunterDAO {
     }
 
     @Override
+    public List<HunterModel> searchHunter(String search) {
+        TypedQuery<HunterModel> query = entityManager.createQuery("SELECT h FROM HunterModel h " +
+                "INNER JOIN FETCH h.tipo_hunter_id th " +
+                "INNER JOIN FETCH h.tipo_nen_id tn " +
+                "INNER JOIN FETCH h.tipo_sanguineo_id ts " +
+                "WHERE h.deleted_at IS NULL " +
+                "AND LOWER(h.nome_hunter) LIKE LOWER(:search) " +
+                "ORDER BY h.id ASC", HunterModel.class);
+        query.setParameter("search", "%" + search + "%");
+        return query.getResultList();
+    }
+
+    @Override
     @Transactional
     public HunterModel create(HunterModel theHunterModel) {
         entityManager.persist(theHunterModel);
@@ -67,6 +80,19 @@ public class HunterService implements HunterDAO {
                 "INNER JOIN FETCH h.tipo_sanguineo_id ts " +
                 "WHERE h.deleted_at IS NOT NULL " +
                 "ORDER BY h.id ASC", HunterModel.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<HunterModel> searchHunterTrash(String search) {
+        TypedQuery<HunterModel> query = entityManager.createQuery("SELECT h FROM HunterModel h " +
+                "INNER JOIN FETCH h.tipo_hunter_id th " +
+                "INNER JOIN FETCH h.tipo_nen_id tn " +
+                "INNER JOIN FETCH h.tipo_sanguineo_id ts " +
+                "WHERE h.deleted_at IS NOT NULL " +
+                "AND LOWER(h.nome_hunter) LIKE LOWER(:search) " +
+                "ORDER BY h.id ASC", HunterModel.class);
+        query.setParameter("search", "%" + search + "%");
         return query.getResultList();
     }
 
