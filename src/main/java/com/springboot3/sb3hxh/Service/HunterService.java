@@ -31,7 +31,20 @@ public class HunterService implements HunterDAO {
     }
 
     @Override
-    public List<HunterModel> searchHunter(String search) {
+    public List<HunterModel> indexPagination(int page, int size) {
+        TypedQuery<HunterModel> query = entityManager.createQuery("SELECT h FROM HunterModel h " +
+                "INNER JOIN FETCH h.tipo_hunter_id th " +
+                "INNER JOIN FETCH h.tipo_nen_id tn " +
+                "INNER JOIN FETCH h.tipo_sanguineo_id ts " +
+                "WHERE h.deleted_at IS NULL " +
+                "ORDER BY h.id ASC", HunterModel.class);
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<HunterModel> searchHunter(String search, int page, int size) {
         TypedQuery<HunterModel> query = entityManager.createQuery("SELECT h FROM HunterModel h " +
                 "INNER JOIN FETCH h.tipo_hunter_id th " +
                 "INNER JOIN FETCH h.tipo_nen_id tn " +
@@ -40,6 +53,8 @@ public class HunterService implements HunterDAO {
                 "AND LOWER(h.nome_hunter) LIKE LOWER(:search) " +
                 "ORDER BY h.id ASC", HunterModel.class);
         query.setParameter("search", "%" + search + "%");
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
         return query.getResultList();
     }
 
@@ -73,18 +88,20 @@ public class HunterService implements HunterDAO {
     }
 
     @Override
-    public List<HunterModel> indexTrash() {
+    public List<HunterModel> indexTrash(int page, int size) {
         TypedQuery<HunterModel> query = entityManager.createQuery("SELECT h FROM HunterModel h " +
                 "INNER JOIN FETCH h.tipo_hunter_id th " +
                 "INNER JOIN FETCH h.tipo_nen_id tn " +
                 "INNER JOIN FETCH h.tipo_sanguineo_id ts " +
                 "WHERE h.deleted_at IS NOT NULL " +
                 "ORDER BY h.id ASC", HunterModel.class);
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
         return query.getResultList();
     }
 
     @Override
-    public List<HunterModel> searchHunterTrash(String search) {
+    public List<HunterModel> searchHunterTrash(String search, int page, int size) {
         TypedQuery<HunterModel> query = entityManager.createQuery("SELECT h FROM HunterModel h " +
                 "INNER JOIN FETCH h.tipo_hunter_id th " +
                 "INNER JOIN FETCH h.tipo_nen_id tn " +
@@ -93,6 +110,8 @@ public class HunterService implements HunterDAO {
                 "AND LOWER(h.nome_hunter) LIKE LOWER(:search) " +
                 "ORDER BY h.id ASC", HunterModel.class);
         query.setParameter("search", "%" + search + "%");
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
         return query.getResultList();
     }
 
@@ -114,6 +133,12 @@ public class HunterService implements HunterDAO {
     public void delete(int id) {
         HunterModel hunterModel = entityManager.find(HunterModel.class,id);
         entityManager.remove(hunterModel);
+    }
+
+    @Override
+    public int totalHunters() {
+        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(h) FROM HunterModel h", Long.class);
+        return query.getSingleResult().intValue();
     }
 
 }

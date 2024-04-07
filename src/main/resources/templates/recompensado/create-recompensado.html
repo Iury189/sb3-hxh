@@ -24,7 +24,7 @@
         </select>
         <div th:if="${#fields.hasErrors('hunter_id')}" th:errors="*{hunter_id}" class="text-danger"></div>
 
-        <label>Tipo de Nen:</label>
+        <label>Recompensa:</label>
         <select th:field="*{recompensa_id}" class="form-control mb-4 w-25">
             <option value="">Escolha uma recompensa</option>
             <option th:each="r : ${recompensa}" th:value="${r.id}" th:text="${r.descricao_recompensa}"></option>

@@ -40,10 +40,17 @@
             <td th:text="${recompensado.verificarStatus}"></td>
             <td>
                 <a th:href="@{'/recompensados/restore-recompensado/' + ${recompensado.id}}" class="btn btn-primary btn-sm"><i class="fa fa-arrows-rotate"></i>&nbsp;Restaurar</a>
-                <a th:href="@{'/recompensados/delete-recompensado/' + ${recompensado.id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>&nbsp;Deletar</a>
+                <!-- <a th:href="@{'/recompensados/delete-recompensado/' + ${recompensado.id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>&nbsp;Deletar</a> -->
             </td>
         </tr>
         </tbody>
     </table>
+    <div class="pagination justify-content-center">
+        <ul class="pagination">
+            <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == i} ? 'active' : ''">
+                <a class="page-link" th:href="@{'/recompensados/trash-list-recompensado?page=' + ${i}}">[[${i}]]</a>
+            </li>
+        </ul>
+    </div>
 </body>
 </html>

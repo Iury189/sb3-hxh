@@ -7,14 +7,16 @@ import java.util.*;
 public interface RecompensadoDAO {
 
     List<RecompensadoModel> index();
+    List<RecompensadoModel> indexPagination(int page, int size);
     RecompensadoModel create(RecompensadoModel theRecompensadoModel);
     RecompensadoModel read(int id);
     RecompensadoModel update(RecompensadoModel theRecompensadoModel);
     void trash(int id);
-    List<RecompensadoModel> indexTrash();
+    List<RecompensadoModel> indexTrash(int page, int size);
     RecompensadoModel restore(int id);
     void delete(int id);
-    List<RecompensadoModel> searchRecompensado(String search);
-    List<RecompensadoModel> searchRecompensadoTrash(String search);
+    List<RecompensadoModel> searchRecompensado(String search, int page, int size);
+    List<RecompensadoModel> searchRecompensadoTrash(String search, int page, int size);
+    int totalRecompensados();
 
 }

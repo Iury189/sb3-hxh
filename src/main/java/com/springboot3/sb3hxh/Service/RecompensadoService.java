@@ -30,7 +30,19 @@ public class RecompensadoService implements RecompensadoDAO {
     }
 
     @Override
-    public List<RecompensadoModel> searchRecompensado(String search) {
+    public List<RecompensadoModel> indexPagination(int page, int size) {
+        TypedQuery<RecompensadoModel> query = entityManager.createQuery("SELECT re FROM RecompensadoModel re " +
+                "INNER JOIN FETCH re.hunter_id h " +
+                "INNER JOIN FETCH re.recompensa_id r " +
+                "WHERE re.deleted_at IS NULL " +
+                "ORDER BY re.id ASC", RecompensadoModel.class);
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<RecompensadoModel> searchRecompensado(String search, int page, int size) {
         TypedQuery<RecompensadoModel> query = entityManager.createQuery("SELECT re FROM RecompensadoModel re " +
                 "INNER JOIN FETCH re.hunter_id h " +
                 "INNER JOIN FETCH re.recompensa_id r " +
@@ -38,6 +50,8 @@ public class RecompensadoService implements RecompensadoDAO {
                 "AND (LOWER(h.nome_hunter) LIKE LOWER(:search) OR LOWER(r.descricao_recompensa) LIKE LOWER(:search)) " +
                 "ORDER BY re.id ASC ", RecompensadoModel.class);
         query.setParameter("search", "%" + search + "%");
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
         return query.getResultList();
     }
 
@@ -71,17 +85,19 @@ public class RecompensadoService implements RecompensadoDAO {
     }
 
     @Override
-    public List<RecompensadoModel> indexTrash() {
+    public List<RecompensadoModel> indexTrash(int page, int size) {
         TypedQuery<RecompensadoModel> query = entityManager.createQuery("SELECT re FROM RecompensadoModel re " +
                 "INNER JOIN FETCH re.hunter_id h " +
                 "INNER JOIN FETCH re.recompensa_id r " +
                 "WHERE re.deleted_at IS NOT NULL " +
                 "ORDER BY re.id ASC", RecompensadoModel.class);
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
         return query.getResultList();
     }
 
     @Override
-    public List<RecompensadoModel> searchRecompensadoTrash(String search) {
+    public List<RecompensadoModel> searchRecompensadoTrash(String search, int page, int size) {
         TypedQuery<RecompensadoModel> query = entityManager.createQuery("SELECT re FROM RecompensadoModel re " +
                 "INNER JOIN FETCH re.hunter_id h " +
                 "INNER JOIN FETCH re.recompensa_id r " +
@@ -89,6 +105,8 @@ public class RecompensadoService implements RecompensadoDAO {
                 "AND (LOWER(h.nome_hunter) LIKE LOWER(:search) OR LOWER(r.descricao_recompensa) LIKE LOWER(:search)) " +
                 "ORDER BY re.id ASC ", RecompensadoModel.class);
         query.setParameter("search", "%" + search + "%");
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
         return query.getResultList();
     }
 
@@ -110,6 +128,12 @@ public class RecompensadoService implements RecompensadoDAO {
     public void delete(int id) {
         RecompensadoModel recompensadoModel = entityManager.find(RecompensadoModel.class,id);
         entityManager.remove(recompensadoModel);
+    }
+
+    @Override
+    public int totalRecompensados() {
+        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(h) FROM RecompensadoModel h", Long.class);
+        return query.getSingleResult().intValue();
     }
 
 }

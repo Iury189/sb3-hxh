@@ -25,12 +25,22 @@ public class RecompensaService implements RecompensaDAO {
         return query.getResultList();
     }
 
-    public List<RecompensaModel> searchRecompensa(String search) {
+    @Override
+    public List<RecompensaModel> indexPagination(int page, int size) {
+        TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r WHERE r.deleted_at IS NULL ORDER BY r.id ASC", RecompensaModel.class);
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
+        return query.getResultList();
+    }
+
+    public List<RecompensaModel> searchRecompensa(String search, int page, int size) {
         TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r " +
                 "WHERE r.deleted_at IS NULL " +
                 "AND LOWER(r.descricao_recompensa) LIKE LOWER(:search) " +
                 "ORDER BY r.id ASC", RecompensaModel.class);
         query.setParameter("search", "%" + search + "%");
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
         return query.getResultList();
     }
 
@@ -64,17 +74,21 @@ public class RecompensaService implements RecompensaDAO {
     }
 
     @Override
-    public List<RecompensaModel> indexTrash() {
+    public List<RecompensaModel> indexTrash(int page, int size) {
         TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r WHERE r.deleted_at IS NOT NULL ORDER BY r.id ASC", RecompensaModel.class);
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
         return query.getResultList();
     }
 
-    public List<RecompensaModel> searchRecompensaTrash(String search) {
+    public List<RecompensaModel> searchRecompensaTrash(String search, int page, int size) {
         TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r " +
                 "WHERE r.deleted_at IS NOT NULL " +
                 "AND LOWER(r.descricao_recompensa) LIKE LOWER(:search) " +
                 "ORDER BY r.id ASC", RecompensaModel.class);
         query.setParameter("search", "%" + search + "%");
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
         return query.getResultList();
     }
 
@@ -96,6 +110,12 @@ public class RecompensaService implements RecompensaDAO {
     public void delete(int id) {
         RecompensaModel recompensaModel = entityManager.find(RecompensaModel.class,id);
         entityManager.remove(recompensaModel);
+    }
+
+    @Override
+    public int totalRecompensas() {
+        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(h) FROM RecompensaModel h", Long.class);
+        return query.getSingleResult().intValue();
     }
 
 }

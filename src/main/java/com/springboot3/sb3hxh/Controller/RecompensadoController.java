@@ -25,20 +25,28 @@ public class RecompensadoController {
     }
 
     @GetMapping("/list")
-    public String listarRecompensados(Model model){
-        List<RecompensadoModel> recompensadoModel = recompensadoService.index();
+    public String listarRecompensados(Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
+        List<RecompensadoModel> recompensadoModel = recompensadoService.indexPagination(page -1, size);
+        int totalItems = recompensadoService.totalRecompensados();
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("recompensados", recompensadoModel);
         return "/recompensado/list-recompensados";
     }
 
     @GetMapping("/filtrar-recompensado")
-    public String filtrarRecompensado(@RequestParam(name = "search", required = false) String search, Model model){
+    public String filtrarRecompensado(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
         List<RecompensadoModel> recompensadoModel;
         if (search != null && !search.isEmpty()) {
-            recompensadoModel = recompensadoService.searchRecompensado(search);
+            recompensadoModel = recompensadoService.searchRecompensado(search, page -1, size);
         } else {
-            recompensadoModel = recompensadoService.index();
+            recompensadoModel = recompensadoService.indexPagination(page -1, size);
         }
+        int totalItems = recompensadoService.totalRecompensados();
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("recompensados", recompensadoModel);
         return "/recompensado/list-recompensados";
     }
@@ -157,20 +165,28 @@ public class RecompensadoController {
     }
 
     @GetMapping("/trash-list-recompensado")
-    public String listarTrashRecompensados(Model model){
-        List<RecompensadoModel> recompensadoModel = recompensadoService.indexTrash();
+    public String listarTrashRecompensados(Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
+        List<RecompensadoModel> recompensadoModel = recompensadoService.indexTrash(page -1, size);
+        int totalItems = recompensadoService.totalRecompensados();
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("recompensados", recompensadoModel);
         return "/recompensado/trash-recompensado";
     }
 
     @GetMapping("/filtrar-recompensado-trash")
-    public String filtrarRecompensadoTrash(@RequestParam(name = "search", required = false) String search, Model model){
+    public String filtrarRecompensadoTrash(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
         List<RecompensadoModel> recompensadoModel;
         if (search != null && !search.isEmpty()) {
-            recompensadoModel = recompensadoService.searchRecompensadoTrash(search);
+            recompensadoModel = recompensadoService.searchRecompensadoTrash(search, page -1, size);
         } else {
-            recompensadoModel = recompensadoService.indexTrash();
+            recompensadoModel = recompensadoService.indexTrash(page -1, size);
         }
+        int totalItems = recompensadoService.totalRecompensados();
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("recompensados", recompensadoModel);
         return "/recompensado/trash-recompensado";
     }
