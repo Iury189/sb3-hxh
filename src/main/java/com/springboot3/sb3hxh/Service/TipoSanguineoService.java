@@ -1,7 +1,7 @@
 package com.springboot3.sb3hxh.Service;
 
 import com.springboot3.sb3hxh.DAO.*;
-import com.springboot3.sb3hxh.Model.*;
+import com.springboot3.sb3hxh.Entity.*;
 import jakarta.persistence.*;
 import org.springframework.stereotype.*;
 
@@ -18,13 +18,24 @@ public class TipoSanguineoService implements TipoSanguineoDAO {
     }
 
     @Override
-    public List<TipoSanguineoModel> index() {
-        TypedQuery<TipoSanguineoModel> query = entityManager.createQuery("SELECT ts FROM TipoSanguineoModel ts WHERE ts.deleted_at IS NULL ORDER BY ts.id ASC", TipoSanguineoModel.class);
+    public List<TipoSanguineoEntity> index() {
+        TypedQuery<TipoSanguineoEntity> query = entityManager.createQuery("SELECT ts FROM TipoSanguineoEntity ts WHERE ts.deleted_at IS NULL ORDER BY ts.id ASC", TipoSanguineoEntity.class);
         return query.getResultList();
     }
 
-    public TipoSanguineoModel read(int id) {
-        return entityManager.find(TipoSanguineoModel.class, id);
+    public TipoSanguineoEntity read(int id) {
+        return entityManager.find(TipoSanguineoEntity.class, id);
+    }
+
+    @Override
+    public boolean existsId(String id) {
+        try {
+            int idAsInt = Integer.parseInt(id);
+            TipoSanguineoEntity tipoSanguineoEntity = entityManager.find(TipoSanguineoEntity.class, idAsInt);
+            return tipoSanguineoEntity != null;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
 }

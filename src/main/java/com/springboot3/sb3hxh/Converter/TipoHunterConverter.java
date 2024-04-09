@@ -1,12 +1,12 @@
 package com.springboot3.sb3hxh.Converter;
 
-import com.springboot3.sb3hxh.Model.TipoHunterModel;
+import com.springboot3.sb3hxh.Entity.TipoHunterEntity;
 import com.springboot3.sb3hxh.Service.TipoHunterService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TipoHunterConverter implements Converter<String, TipoHunterModel> {
+public class TipoHunterConverter implements Converter<String, TipoHunterEntity> {
 
     private final TipoHunterService tipoHunterService;
 
@@ -15,7 +15,7 @@ public class TipoHunterConverter implements Converter<String, TipoHunterModel> {
     }
 
     @Override
-    public TipoHunterModel convert(String source) {
+    public TipoHunterEntity convert(String source) {
         if (source.isEmpty()) {
             return null;
         }

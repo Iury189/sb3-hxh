@@ -1,4 +1,4 @@
-package com.springboot3.sb3hxh.Model;
+package com.springboot3.sb3hxh.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -9,7 +9,7 @@ import java.util.*;
 
 @Entity
 @Table(name="recompensas")
-public class RecompensaModel {
+public class RecompensaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +29,11 @@ public class RecompensaModel {
     @Column(name = "deleted_at")
     private LocalDateTime deleted_at;
 
-    public RecompensaModel(){
+    public RecompensaEntity(){
 
     }
 
-    public RecompensaModel(int id, String descricao_recompensa, Float valor_recompensa, LocalDateTime deleted_at) {
+    public RecompensaEntity(int id, String descricao_recompensa, Float valor_recompensa, LocalDateTime deleted_at) {
         this.id = id;
         this.descricao_recompensa = descricao_recompensa;
         this.valor_recompensa = valor_recompensa;

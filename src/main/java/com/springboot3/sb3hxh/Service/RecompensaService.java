@@ -1,7 +1,7 @@
 package com.springboot3.sb3hxh.Service;
 
 import com.springboot3.sb3hxh.DAO.*;
-import com.springboot3.sb3hxh.Model.*;
+import com.springboot3.sb3hxh.Entity.*;
 import jakarta.persistence.*;
 import org.springframework.stereotype.*;
 import jakarta.transaction.*;
@@ -20,24 +20,24 @@ public class RecompensaService implements RecompensaDAO {
     }
 
     @Override
-    public List<RecompensaModel> index() {
-        TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r WHERE r.deleted_at IS NULL ORDER BY r.id ASC", RecompensaModel.class);
+    public List<RecompensaEntity> index() {
+        TypedQuery<RecompensaEntity> query = entityManager.createQuery("SELECT r FROM RecompensaEntity r WHERE r.deleted_at IS NULL ORDER BY r.id ASC", RecompensaEntity.class);
         return query.getResultList();
     }
 
     @Override
-    public List<RecompensaModel> indexPagination(int page, int size) {
-        TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r WHERE r.deleted_at IS NULL ORDER BY r.id ASC", RecompensaModel.class);
+    public List<RecompensaEntity> indexPagination(int page, int size) {
+        TypedQuery<RecompensaEntity> query = entityManager.createQuery("SELECT r FROM RecompensaEntity r WHERE r.deleted_at IS NULL ORDER BY r.id ASC", RecompensaEntity.class);
         query.setFirstResult(page * size);
         query.setMaxResults(size);
         return query.getResultList();
     }
 
-    public List<RecompensaModel> searchRecompensa(String search, int page, int size) {
-        TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r " +
+    public List<RecompensaEntity> searchRecompensa(String search, int page, int size) {
+        TypedQuery<RecompensaEntity> query = entityManager.createQuery("SELECT r FROM RecompensaEntity r " +
                 "WHERE r.deleted_at IS NULL " +
                 "AND LOWER(r.descricao_recompensa) LIKE LOWER(:search) " +
-                "ORDER BY r.id ASC", RecompensaModel.class);
+                "ORDER BY r.id ASC", RecompensaEntity.class);
         query.setParameter("search", "%" + search + "%");
         query.setFirstResult(page * size);
         query.setMaxResults(size);
@@ -46,46 +46,46 @@ public class RecompensaService implements RecompensaDAO {
 
     @Override
     @Transactional
-    public RecompensaModel create(RecompensaModel theRecompensaModel) {
-        entityManager.persist(theRecompensaModel);
-        return theRecompensaModel;
+    public RecompensaEntity create(RecompensaEntity theRecompensaEntity) {
+        entityManager.persist(theRecompensaEntity);
+        return theRecompensaEntity;
     }
 
     @Override
-    public RecompensaModel read(int id) {
-        return entityManager.find(RecompensaModel.class, id);
+    public RecompensaEntity read(int id) {
+        return entityManager.find(RecompensaEntity.class, id);
     }
 
     @Override
     @Transactional
-    public RecompensaModel update(RecompensaModel theRecompensaModel) {
-        RecompensaModel recompensaModel = entityManager.merge(theRecompensaModel);
-        return recompensaModel;
+    public RecompensaEntity update(RecompensaEntity theRecompensaEntity) {
+        RecompensaEntity recompensaEntity = entityManager.merge(theRecompensaEntity);
+        return recompensaEntity;
     }
 
     @Override
     @Transactional
     public void trash(int id) {
-        RecompensaModel recompensaModel = entityManager.find(RecompensaModel.class, id);
-        if (recompensaModel != null) {
-            recompensaModel.setDeletedAt(LocalDateTime.now());
-            entityManager.merge(recompensaModel);
+        RecompensaEntity recompensaEntity = entityManager.find(RecompensaEntity.class, id);
+        if (recompensaEntity != null) {
+            recompensaEntity.setDeletedAt(LocalDateTime.now());
+            entityManager.merge(recompensaEntity);
         }
     }
 
     @Override
-    public List<RecompensaModel> indexTrash(int page, int size) {
-        TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r WHERE r.deleted_at IS NOT NULL ORDER BY r.id ASC", RecompensaModel.class);
+    public List<RecompensaEntity> indexTrash(int page, int size) {
+        TypedQuery<RecompensaEntity> query = entityManager.createQuery("SELECT r FROM RecompensaEntity r WHERE r.deleted_at IS NOT NULL ORDER BY r.id ASC", RecompensaEntity.class);
         query.setFirstResult(page * size);
         query.setMaxResults(size);
         return query.getResultList();
     }
 
-    public List<RecompensaModel> searchRecompensaTrash(String search, int page, int size) {
-        TypedQuery<RecompensaModel> query = entityManager.createQuery("SELECT r FROM RecompensaModel r " +
+    public List<RecompensaEntity> searchRecompensaTrash(String search, int page, int size) {
+        TypedQuery<RecompensaEntity> query = entityManager.createQuery("SELECT r FROM RecompensaEntity r " +
                 "WHERE r.deleted_at IS NOT NULL " +
                 "AND LOWER(r.descricao_recompensa) LIKE LOWER(:search) " +
-                "ORDER BY r.id ASC", RecompensaModel.class);
+                "ORDER BY r.id ASC", RecompensaEntity.class);
         query.setParameter("search", "%" + search + "%");
         query.setFirstResult(page * size);
         query.setMaxResults(size);
@@ -94,28 +94,39 @@ public class RecompensaService implements RecompensaDAO {
 
     @Override
     @Transactional
-    public RecompensaModel restore(int id) {
-        RecompensaModel recompensaModel = entityManager.find(RecompensaModel.class, id);
-        if (recompensaModel != null) {
-            recompensaModel.setDeletedAt(null);
-            entityManager.persist(recompensaModel);
+    public RecompensaEntity restore(int id) {
+        RecompensaEntity recompensaEntity = entityManager.find(RecompensaEntity.class, id);
+        if (recompensaEntity != null) {
+            recompensaEntity.setDeletedAt(null);
+            entityManager.persist(recompensaEntity);
         } else {
             throw new IllegalArgumentException("Registro não encontrado com o ID fornecido: " + id);
         }
-        return recompensaModel;
+        return recompensaEntity;
     }
 
     @Override
     @Transactional
     public void delete(int id) {
-        RecompensaModel recompensaModel = entityManager.find(RecompensaModel.class,id);
-        entityManager.remove(recompensaModel);
+        RecompensaEntity recompensaEntity = entityManager.find(RecompensaEntity.class,id);
+        entityManager.remove(recompensaEntity);
     }
 
     @Override
     public int totalRecompensas() {
-        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(h) FROM RecompensaModel h", Long.class);
+        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(h) FROM RecompensaEntity h", Long.class);
         return query.getSingleResult().intValue();
+    }
+
+    @Override
+    public boolean existsId(String id) {
+        try {
+            int idAsInt = Integer.parseInt(id);
+            RecompensaEntity recompensaEntity = entityManager.find(RecompensaEntity.class, idAsInt);
+            return recompensaEntity != null;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
 }

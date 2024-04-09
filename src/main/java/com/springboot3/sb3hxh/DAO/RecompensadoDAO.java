@@ -1,22 +1,22 @@
 package com.springboot3.sb3hxh.DAO;
 
-import com.springboot3.sb3hxh.Model.RecompensadoModel;
+import com.springboot3.sb3hxh.Entity.RecompensadoEntity;
 
 import java.util.*;
 
 public interface RecompensadoDAO {
 
-    List<RecompensadoModel> index();
-    List<RecompensadoModel> indexPagination(int page, int size);
-    RecompensadoModel create(RecompensadoModel theRecompensadoModel);
-    RecompensadoModel read(int id);
-    RecompensadoModel update(RecompensadoModel theRecompensadoModel);
+    List<RecompensadoEntity> index();
+    List<RecompensadoEntity> indexPagination(int page, int size);
+    RecompensadoEntity create(RecompensadoEntity theRecompensadoEntity);
+    RecompensadoEntity read(int id);
+    RecompensadoEntity update(RecompensadoEntity theRecompensadoEntity);
     void trash(int id);
-    List<RecompensadoModel> indexTrash(int page, int size);
-    RecompensadoModel restore(int id);
+    List<RecompensadoEntity> indexTrash(int page, int size);
+    RecompensadoEntity restore(int id);
     void delete(int id);
-    List<RecompensadoModel> searchRecompensado(String search, int page, int size);
-    List<RecompensadoModel> searchRecompensadoTrash(String search, int page, int size);
+    List<RecompensadoEntity> searchRecompensado(String search, int page, int size);
+    List<RecompensadoEntity> searchRecompensadoTrash(String search, int page, int size);
     int totalRecompensados();
 
 }

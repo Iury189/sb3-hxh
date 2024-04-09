@@ -23,7 +23,6 @@
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
-                <th>ID</th>
                 <th>Nome</th>
                 <th>Idade</th>
                 <th>Altura</th>
@@ -38,7 +37,6 @@
         </thead>
         <tbody>
         <tr th:each="hunter : ${hunters}">
-            <td th:text="${hunter.id}"></td>
             <td th:text="${hunter.nome_hunter}"></td>
             <td th:text="${hunter.idade_hunter}"></td>
             <td th:text="${hunter.alturaFormatada}"></td>

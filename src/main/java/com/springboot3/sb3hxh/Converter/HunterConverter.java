@@ -1,12 +1,12 @@
 package com.springboot3.sb3hxh.Converter;
 
-import com.springboot3.sb3hxh.Model.HunterModel;
+import com.springboot3.sb3hxh.Entity.HunterEntity;
 import com.springboot3.sb3hxh.Service.HunterService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class HunterConverter implements Converter<String, HunterModel> {
+public class HunterConverter implements Converter<String, HunterEntity> {
 
     private final HunterService hunterService;
 
@@ -15,7 +15,7 @@ public class HunterConverter implements Converter<String, HunterModel> {
     }
 
     @Override
-    public HunterModel convert(String source) {
+    public HunterEntity convert(String source) {
         if (source.isEmpty()) {
             return null;
         }

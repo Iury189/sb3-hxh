@@ -1,12 +1,12 @@
 package com.springboot3.sb3hxh.Converter;
 
-import com.springboot3.sb3hxh.Model.TipoNenModel;
+import com.springboot3.sb3hxh.Entity.TipoNenEntity;
 import com.springboot3.sb3hxh.Service.TipoNenService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TipoNenConverter implements Converter<String, TipoNenModel>  {
+public class TipoNenConverter implements Converter<String, TipoNenEntity>  {
 
     private final TipoNenService tipoNenService;
 
@@ -15,7 +15,7 @@ public class TipoNenConverter implements Converter<String, TipoNenModel>  {
     }
 
     @Override
-    public TipoNenModel convert(String source) {
+    public TipoNenEntity convert(String source) {
         if (source.isEmpty()) {
             return null;
         }

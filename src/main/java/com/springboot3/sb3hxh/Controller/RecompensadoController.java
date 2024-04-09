@@ -1,6 +1,6 @@
 package com.springboot3.sb3hxh.Controller;
 
-import com.springboot3.sb3hxh.Model.*;
+import com.springboot3.sb3hxh.Entity.*;
 import com.springboot3.sb3hxh.Service.*;
 import jakarta.validation.*;
 import org.springframework.stereotype.*;
@@ -26,40 +26,40 @@ public class RecompensadoController {
 
     @GetMapping("/list")
     public String listarRecompensados(Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
-        List<RecompensadoModel> recompensadoModel = recompensadoService.indexPagination(page -1, size);
+        List<RecompensadoEntity> recompensadoEntity = recompensadoService.indexPagination(page -1, size);
         int totalItems = recompensadoService.totalRecompensados();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("recompensados", recompensadoModel);
+        model.addAttribute("recompensados", recompensadoEntity);
         return "/recompensado/list-recompensados";
     }
 
     @GetMapping("/filtrar-recompensado")
     public String filtrarRecompensado(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
-        List<RecompensadoModel> recompensadoModel;
+        List<RecompensadoEntity> recompensadoEntity;
         if (search != null && !search.isEmpty()) {
-            recompensadoModel = recompensadoService.searchRecompensado(search, page -1, size);
+            recompensadoEntity = recompensadoService.searchRecompensado(search, page -1, size);
         } else {
-            recompensadoModel = recompensadoService.indexPagination(page -1, size);
+            recompensadoEntity = recompensadoService.indexPagination(page -1, size);
         }
         int totalItems = recompensadoService.totalRecompensados();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("recompensados", recompensadoModel);
+        model.addAttribute("recompensados", recompensadoEntity);
         return "/recompensado/list-recompensados";
     }
 
     @GetMapping("/form-create-recompensado")
     public String formCreateRecompensado(Model model){
-        RecompensadoModel recompesadoModel = new RecompensadoModel();
-        List<HunterModel> hunterModel = hunterService.index();
-        List<RecompensaModel> recompensaModel = recompensaService.index();
-        List<RecompensaModel> recompensasDisponiveis = new ArrayList<>();
-        for (RecompensaModel recompensa : recompensaModel) {
+        RecompensadoEntity recompesadoModel = new RecompensadoEntity();
+        List<HunterEntity> hunterEntity = hunterService.index();
+        List<RecompensaEntity> recompensaEntity = recompensaService.index();
+        List<RecompensaEntity> recompensasDisponiveis = new ArrayList<>();
+        for (RecompensaEntity recompensa : recompensaEntity) {
             boolean jaAssociado = false;
-            for (RecompensadoModel recompensado : recompensadoService.index()) {
+            for (RecompensadoEntity recompensado : recompensadoService.index()) {
                 if (recompensado.getRecompensa_id().equals(recompensa)) {
                     jaAssociado = true;
                     break;
@@ -70,19 +70,19 @@ public class RecompensadoController {
             }
         }
         model.addAttribute("recompensado", recompesadoModel);
-        model.addAttribute("hunter", hunterModel);
+        model.addAttribute("hunter", hunterEntity);
         model.addAttribute("recompensa", recompensasDisponiveis);
         return "/recompensado/create-recompensado";
     }
 
     @PostMapping("/create-recompensado")
-    public String createRecompensado(@ModelAttribute("recompensado") @Valid RecompensadoModel recompensadoModel, BindingResult bindingResult, Model model) {
-        List<HunterModel> hunterModel = hunterService.index();
-        List<RecompensaModel> recompensaModel = recompensaService.index();
-        List<RecompensaModel> recompensasDisponiveis = new ArrayList<>();
-        for (RecompensaModel recompensa : recompensaModel) {
+    public String createRecompensado(@ModelAttribute("recompensado") @Valid RecompensadoEntity recompensadoEntity, BindingResult bindingResult, Model model) {
+        List<HunterEntity> hunterEntity = hunterService.index();
+        List<RecompensaEntity> recompensaEntity = recompensaService.index();
+        List<RecompensaEntity> recompensasDisponiveis = new ArrayList<>();
+        for (RecompensaEntity recompensa : recompensaEntity) {
             boolean jaAssociado = false;
-            for (RecompensadoModel recompensado : recompensadoService.index()) {
+            for (RecompensadoEntity recompensado : recompensadoService.index()) {
                 if (recompensado.getRecompensa_id().equals(recompensa)) {
                     jaAssociado = true;
                     break;
@@ -92,25 +92,25 @@ public class RecompensadoController {
                 recompensasDisponiveis.add(recompensa);
             }
         }
-        model.addAttribute("hunter", hunterModel);
+        model.addAttribute("hunter", hunterEntity);
         model.addAttribute("recompensa", recompensasDisponiveis);
         if (bindingResult.hasErrors()) {
             return "/recompensado/create-recompensado";
         } else {
-            recompensadoService.create(recompensadoModel);
+            recompensadoService.create(recompensadoEntity);
             return "redirect:/recompensados/list";
         }
     }
 
     @GetMapping("/form-update-recompensado/{id}")
     public String formUpdateRecompensado(@PathVariable("id") int id, Model model) {
-        RecompensadoModel recompensadoModel = recompensadoService.read(id);
-        List<HunterModel> hunterModel = hunterService.index();
-        List<RecompensaModel> recompensaModel = recompensaService.index();
-        List<RecompensaModel> recompensasDisponiveis = new ArrayList<>();
-        for (RecompensaModel recompensa : recompensaModel) {
+        RecompensadoEntity recompensadoEntity = recompensadoService.read(id);
+        List<HunterEntity> hunterEntity = hunterService.index();
+        List<RecompensaEntity> recompensaEntity = recompensaService.index();
+        List<RecompensaEntity> recompensasDisponiveis = new ArrayList<>();
+        for (RecompensaEntity recompensa : recompensaEntity) {
             boolean jaAssociado = false;
-            for (RecompensadoModel recompensado : recompensadoService.index()) {
+            for (RecompensadoEntity recompensado : recompensadoService.index()) {
                 if (recompensado.getRecompensa_id().equals(recompensa)) {
                     jaAssociado = true;
                     break;
@@ -120,10 +120,10 @@ public class RecompensadoController {
                 recompensasDisponiveis.add(recompensa);
             }
         }
-        model.addAttribute("recompensado", recompensadoModel);
-        model.addAttribute("hunter", hunterModel);
+        model.addAttribute("recompensado", recompensadoEntity);
+        model.addAttribute("hunter", hunterEntity);
         model.addAttribute("recompensa", recompensasDisponiveis);
-        if (recompensadoModel != null) {
+        if (recompensadoEntity != null) {
             return "/recompensado/update-recompensado";
         } else {
             return "redirect:/recompensados/list";
@@ -131,13 +131,13 @@ public class RecompensadoController {
     }
 
     @PostMapping("/update-recompensados/{id}")
-    public String updateRecompensado(@PathVariable("id") int id, @ModelAttribute("recompensado") @Valid RecompensadoModel recompensadoModel, BindingResult bindingResult, Model model) {
-        List<HunterModel> hunterModel = hunterService.index();
-        List<RecompensaModel> recompensaModel = recompensaService.index();
-        List<RecompensaModel> recompensasDisponiveis = new ArrayList<>();
-        for (RecompensaModel recompensa : recompensaModel) {
+    public String updateRecompensado(@PathVariable("id") int id, @ModelAttribute("recompensado") @Valid RecompensadoEntity recompensadoEntity, BindingResult bindingResult, Model model) {
+        List<HunterEntity> hunterEntity = hunterService.index();
+        List<RecompensaEntity> recompensaEntity = recompensaService.index();
+        List<RecompensaEntity> recompensasDisponiveis = new ArrayList<>();
+        for (RecompensaEntity recompensa : recompensaEntity) {
             boolean jaAssociado = false;
-            for (RecompensadoModel recompensado : recompensadoService.index()) {
+            for (RecompensadoEntity recompensado : recompensadoService.index()) {
                 if (recompensado.getRecompensa_id().equals(recompensa)) {
                     jaAssociado = true;
                     break;
@@ -147,13 +147,13 @@ public class RecompensadoController {
                 recompensasDisponiveis.add(recompensa);
             }
         }
-        model.addAttribute("hunter", hunterModel);
+        model.addAttribute("hunter", hunterEntity);
         model.addAttribute("recompensa", recompensasDisponiveis);
         if (bindingResult.hasErrors()) {
             return "/recompensado/update-recompensado";
         } else {
-            recompensadoModel.setId(id);
-            recompensadoService.update(recompensadoModel);
+            recompensadoEntity.setId(id);
+            recompensadoService.update(recompensadoEntity);
             return "redirect:/recompensados/list";
         }
     }
@@ -166,28 +166,28 @@ public class RecompensadoController {
 
     @GetMapping("/trash-list-recompensado")
     public String listarTrashRecompensados(Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
-        List<RecompensadoModel> recompensadoModel = recompensadoService.indexTrash(page -1, size);
+        List<RecompensadoEntity> recompensadoEntity = recompensadoService.indexTrash(page -1, size);
         int totalItems = recompensadoService.totalRecompensados();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("recompensados", recompensadoModel);
+        model.addAttribute("recompensados", recompensadoEntity);
         return "/recompensado/trash-recompensado";
     }
 
     @GetMapping("/filtrar-recompensado-trash")
     public String filtrarRecompensadoTrash(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
-        List<RecompensadoModel> recompensadoModel;
+        List<RecompensadoEntity> recompensadoEntity;
         if (search != null && !search.isEmpty()) {
-            recompensadoModel = recompensadoService.searchRecompensadoTrash(search, page -1, size);
+            recompensadoEntity = recompensadoService.searchRecompensadoTrash(search, page -1, size);
         } else {
-            recompensadoModel = recompensadoService.indexTrash(page -1, size);
+            recompensadoEntity = recompensadoService.indexTrash(page -1, size);
         }
         int totalItems = recompensadoService.totalRecompensados();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("recompensados", recompensadoModel);
+        model.addAttribute("recompensados", recompensadoEntity);
         return "/recompensado/trash-recompensado";
     }
 

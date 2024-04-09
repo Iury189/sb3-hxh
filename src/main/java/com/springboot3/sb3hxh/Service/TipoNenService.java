@@ -1,7 +1,7 @@
 package com.springboot3.sb3hxh.Service;
 
 import com.springboot3.sb3hxh.DAO.*;
-import com.springboot3.sb3hxh.Model.*;
+import com.springboot3.sb3hxh.Entity.*;
 import jakarta.persistence.*;
 import org.springframework.stereotype.*;
 
@@ -18,13 +18,24 @@ public class TipoNenService implements TipoNenDAO {
     }
 
     @Override
-    public List<TipoNenModel> index() {
-        TypedQuery<TipoNenModel> query = entityManager.createQuery("SELECT tn FROM TipoNenModel tn WHERE tn.deleted_at IS NULL ORDER BY tn.id ASC", TipoNenModel.class);
+    public List<TipoNenEntity> index() {
+        TypedQuery<TipoNenEntity> query = entityManager.createQuery("SELECT tn FROM TipoNenEntity tn WHERE tn.deleted_at IS NULL ORDER BY tn.id ASC", TipoNenEntity.class);
         return query.getResultList();
     }
 
-    public TipoNenModel read(int id) {
-        return entityManager.find(TipoNenModel.class, id);
+    public TipoNenEntity read(int id) {
+        return entityManager.find(TipoNenEntity.class, id);
+    }
+
+    @Override
+    public boolean existsId(String id) {
+        try {
+            int idAsInt = Integer.parseInt(id);
+            TipoNenEntity tipoNenEntity = entityManager.find(TipoNenEntity.class, idAsInt);
+            return tipoNenEntity != null;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
 }

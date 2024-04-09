@@ -1,5 +1,6 @@
-package com.springboot3.sb3hxh.Model;
+package com.springboot3.sb3hxh.Entity;
 
+import com.springboot3.sb3hxh.Validation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.*;
@@ -10,7 +11,7 @@ import java.util.*;
 
 @Entity
 @Table(name="hunters")
-public class HunterModel {
+public class HunterEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,17 +42,17 @@ public class HunterModel {
     @OneToOne
     @NotNull(message = "O tipo de Hunter é requerido")
     @JoinColumn(name="tipo_hunter_id", referencedColumnName="id")
-    private TipoHunterModel tipo_hunter_id;
+    private TipoHunterEntity tipo_hunter_id;
 
     @OneToOne
     @NotNull(message = "O tipo de Nen é requerido")
     @JoinColumn(name="tipo_nen_id", referencedColumnName="id")
-    private TipoNenModel tipo_nen_id;
+    private TipoNenEntity tipo_nen_id;
 
     @OneToOne
     @NotNull(message = "O tipo sanguíneo é requerido")
     @JoinColumn(name="tipo_sanguineo_id", referencedColumnName="id")
-    private TipoSanguineoModel tipo_sanguineo_id;
+    private TipoSanguineoEntity tipo_sanguineo_id;
 
     @NotNull(message = "A data de início é requerida")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -64,11 +65,11 @@ public class HunterModel {
     @Column(name = "deleted_at")
     private LocalDateTime deleted_at;
 
-    public HunterModel() {
+    public HunterEntity() {
 
     }
 
-    public HunterModel(int id, String nome_hunter, Integer idade_hunter, Float altura_hunter, Float peso_hunter, Date inicio, Date termino, LocalDateTime deleted_at) {
+    public HunterEntity(int id, String nome_hunter, Integer idade_hunter, Float altura_hunter, Float peso_hunter, Date inicio, Date termino, LocalDateTime deleted_at) {
         this.id = id;
         this.nome_hunter = nome_hunter;
         this.idade_hunter = idade_hunter;
@@ -99,17 +100,17 @@ public class HunterModel {
 
     public void setPeso_hunter(Float peso_hunter) { this.peso_hunter = peso_hunter; }
 
-    public TipoHunterModel getTipo_hunter_id() { return tipo_hunter_id; }
+    public TipoHunterEntity getTipo_hunter_id() { return tipo_hunter_id; }
 
-    public void setTipo_hunter_id(TipoHunterModel tipo_hunter_id) { this.tipo_hunter_id = tipo_hunter_id; }
+    public void setTipo_hunter_id(TipoHunterEntity tipo_hunter_id) { this.tipo_hunter_id = tipo_hunter_id; }
 
-    public TipoNenModel getTipo_nen_id() { return tipo_nen_id; }
+    public TipoNenEntity getTipo_nen_id() { return tipo_nen_id; }
 
-    public void setTipo_nen_id(TipoNenModel tipo_nen_id) { this.tipo_nen_id = tipo_nen_id; }
+    public void setTipo_nen_id(TipoNenEntity tipo_nen_id) { this.tipo_nen_id = tipo_nen_id; }
 
-    public TipoSanguineoModel getTipo_sanguineo_id() { return tipo_sanguineo_id; }
+    public TipoSanguineoEntity getTipo_sanguineo_id() { return tipo_sanguineo_id; }
 
-    public void setTipo_sanguineo_id(TipoSanguineoModel tipo_sanguineo_id) { this.tipo_sanguineo_id = tipo_sanguineo_id; }
+    public void setTipo_sanguineo_id(TipoSanguineoEntity tipo_sanguineo_id) { this.tipo_sanguineo_id = tipo_sanguineo_id; }
 
     public Date getInicio() { return inicio; }
 

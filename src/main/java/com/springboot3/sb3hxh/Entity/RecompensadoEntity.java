@@ -1,5 +1,6 @@
-package com.springboot3.sb3hxh.Model;
+package com.springboot3.sb3hxh.Entity;
 
+import com.springboot3.sb3hxh.Validation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -7,7 +8,7 @@ import java.time.*;
 
 @Entity
 @Table(name="recompensados")
-public class RecompensadoModel {
+public class RecompensadoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,12 +18,12 @@ public class RecompensadoModel {
     @OneToOne
     @NotNull(message = "Hunter é requerido")
     @JoinColumn(name="hunter_id", referencedColumnName="id")
-    private HunterModel hunter_id;
+    private HunterEntity hunter_id;
 
     @OneToOne
     @NotNull(message = "Recompensa é requerida")
     @JoinColumn(name="recompensa_id", referencedColumnName="id")
-    private RecompensaModel recompensa_id;
+    private RecompensaEntity recompensa_id;
 
     @AssertTrue(message = "O status do recompensado é requerido")
     @Column(name="status")
@@ -31,11 +32,11 @@ public class RecompensadoModel {
     @Column(name = "deleted_at")
     private LocalDateTime deleted_at;
 
-    public RecompensadoModel() {
+    public RecompensadoEntity() {
 
     }
 
-    public RecompensadoModel(int id, Boolean status, LocalDateTime deleted_at) {
+    public RecompensadoEntity(int id, Boolean status, LocalDateTime deleted_at) {
         this.id = id;
         this.status = status;
         this.deleted_at = deleted_at;
@@ -45,13 +46,13 @@ public class RecompensadoModel {
 
     public void setId(int id) { this.id = id; }
 
-    public HunterModel getHunter_id() { return hunter_id; }
+    public HunterEntity getHunter_id() { return hunter_id; }
 
-    public void setHunter_id(HunterModel hunter_id) { this.hunter_id = hunter_id; }
+    public void setHunter_id(HunterEntity hunter_id) { this.hunter_id = hunter_id; }
 
-    public RecompensaModel getRecompensa_id() { return recompensa_id; }
+    public RecompensaEntity getRecompensa_id() { return recompensa_id; }
 
-    public void setRecompensa_id(RecompensaModel recompensa_id) { this.recompensa_id = recompensa_id; }
+    public void setRecompensa_id(RecompensaEntity recompensa_id) { this.recompensa_id = recompensa_id; }
 
     public Boolean getStatus() { return status; }
 

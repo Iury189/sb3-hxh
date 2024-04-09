@@ -1,4 +1,4 @@
-package com.springboot3.sb3hxh.Model;
+package com.springboot3.sb3hxh.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -7,7 +7,7 @@ import java.time.*;
 
 @Entity
 @Table(name="tipos_hunters")
-public class TipoHunterModel {
+public class TipoHunterEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,11 +21,11 @@ public class TipoHunterModel {
     @Column(name = "deleted_at")
     private LocalDateTime deleted_at;
 
-    public TipoHunterModel(){
+    public TipoHunterEntity(){
 
     }
 
-    public TipoHunterModel(int id, String descricao, LocalDateTime deleted_at) {
+    public TipoHunterEntity(int id, String descricao, LocalDateTime deleted_at) {
         this.id = id;
         this.descricao = descricao;
         this.deleted_at = deleted_at;

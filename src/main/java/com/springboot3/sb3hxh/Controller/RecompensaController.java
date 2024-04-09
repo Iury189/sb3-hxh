@@ -1,6 +1,6 @@
 package com.springboot3.sb3hxh.Controller;
 
-import com.springboot3.sb3hxh.Model.*;
+import com.springboot3.sb3hxh.Entity.*;
 import com.springboot3.sb3hxh.Service.*;
 import jakarta.validation.*;
 import org.springframework.stereotype.*;
@@ -22,54 +22,54 @@ public class RecompensaController {
 
     @GetMapping("/list")
     public String listarRecompensas(Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
-        List<RecompensaModel> recompensaModel = recompensaService.indexPagination(page -1, size);
+        List<RecompensaEntity> recompensaEntity = recompensaService.indexPagination(page -1, size);
         int totalItems = recompensaService.totalRecompensas();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("recompensas", recompensaModel);
+        model.addAttribute("recompensas", recompensaEntity);
         return "/recompensa/list-recompensas";
     }
 
     @GetMapping("/filtrar-recompensa")
     public String filtrarRecompensa(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
-        List<RecompensaModel> recompensaModel;
+        List<RecompensaEntity> recompensaEntity;
         if (search != null && !search.isEmpty()) {
-            recompensaModel = recompensaService.searchRecompensa(search, page -1, size);
+            recompensaEntity = recompensaService.searchRecompensa(search, page -1, size);
         } else {
-            recompensaModel = recompensaService.indexPagination(page -1, size);
+            recompensaEntity = recompensaService.indexPagination(page -1, size);
         }
         int totalItems = recompensaService.totalRecompensas();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("recompensas", recompensaModel);
+        model.addAttribute("recompensas", recompensaEntity);
         return "/recompensa/list-recompensas";
     }
 
     @GetMapping("/form-create-recompensa")
     public String formCreateRecompensa(Model model){
-        RecompensaModel recompensaModel = new RecompensaModel();
-        model.addAttribute("recompensa", recompensaModel);
+        RecompensaEntity recompensaEntity = new RecompensaEntity();
+        model.addAttribute("recompensa", recompensaEntity);
         return "/recompensa/create-recompensa";
     }
 
     @PostMapping("/create-recompensa")
-    public String createRecompensa(@ModelAttribute("recompensa") @Valid RecompensaModel recompensaModel, BindingResult bindingResult) {
-        System.out.println(recompensaModel);
+    public String createRecompensa(@ModelAttribute("recompensa") @Valid RecompensaEntity recompensaEntity, BindingResult bindingResult) {
+        System.out.println(recompensaEntity);
         if (bindingResult.hasErrors()) {
             return "/recompensa/create-recompensa";
         } else {
-            recompensaService.create(recompensaModel);
+            recompensaService.create(recompensaEntity);
             return "redirect:/recompensas/list";
         }
     }
 
     @GetMapping("/form-update-recompensa/{id}")
     public String formUpdateRecompensa(@PathVariable("id") int id, Model model) {
-        RecompensaModel recompensaModel = recompensaService.read(id);
-        if (recompensaModel != null) {
-            model.addAttribute("recompensa", recompensaModel);
+        RecompensaEntity recompensaEntity = recompensaService.read(id);
+        if (recompensaEntity != null) {
+            model.addAttribute("recompensa", recompensaEntity);
             return "/recompensa/update-recompensa";
         } else {
             return "redirect:/recompensas/list";
@@ -77,12 +77,12 @@ public class RecompensaController {
     }
 
     @PostMapping("/update-recompensa/{id}")
-    public String updateRecompensa(@PathVariable("id") int id, @ModelAttribute("recompensa") @Valid RecompensaModel recompensaModel, BindingResult bindingResult) {
+    public String updateRecompensa(@PathVariable("id") int id, @ModelAttribute("recompensa") @Valid RecompensaEntity recompensaEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/recompensa/update-recompensa";
         } else {
-            recompensaModel.setId(id);
-            recompensaService.update(recompensaModel);
+            recompensaEntity.setId(id);
+            recompensaService.update(recompensaEntity);
             return "redirect:/recompensas/list";
         }
     }
@@ -95,28 +95,28 @@ public class RecompensaController {
 
     @GetMapping("/trash-list-recompensa")
     public String listarTrashRecompensas(Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
-        List<RecompensaModel> recompensaModel = recompensaService.indexTrash(page -1, size);
+        List<RecompensaEntity> recompensaEntity = recompensaService.indexTrash(page -1, size);
         int totalItems = recompensaService.totalRecompensas();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("recompensas", recompensaModel);
+        model.addAttribute("recompensas", recompensaEntity);
         return "/recompensa/trash-recompensa";
     }
 
     @GetMapping("/filtrar-recompensa-trash")
     public String filtrarRecompensaTrash(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
-        List<RecompensaModel> recompensaModel;
+        List<RecompensaEntity> recompensaEntity;
         if (search != null && !search.isEmpty()) {
-            recompensaModel = recompensaService.searchRecompensaTrash(search, page -1, size);
+            recompensaEntity = recompensaService.searchRecompensaTrash(search, page -1, size);
         } else {
-            recompensaModel = recompensaService.indexTrash(page -1, size);
+            recompensaEntity = recompensaService.indexTrash(page -1, size);
         }
         int totalItems = recompensaService.totalRecompensas();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("recompensas", recompensaModel);
+        model.addAttribute("recompensas", recompensaEntity);
         return "/recompensa/trash-recompensa";
     }
 
