@@ -38,12 +38,14 @@ public class RecompensadoController {
     @GetMapping("/filtrar-recompensado")
     public String filtrarRecompensado(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
         List<RecompensadoEntity> recompensadoEntity;
+        int totalItems;
         if (search != null && !search.isEmpty()) {
             recompensadoEntity = recompensadoService.searchRecompensado(search, page -1, size);
+            totalItems = recompensadoService.totalRecompensadosBySearch(search);
         } else {
             recompensadoEntity = recompensadoService.indexPagination(page -1, size);
+            totalItems = recompensadoService.totalRecompensados();
         }
-        int totalItems = recompensadoService.totalRecompensados();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
@@ -178,12 +180,14 @@ public class RecompensadoController {
     @GetMapping("/filtrar-recompensado-trash")
     public String filtrarRecompensadoTrash(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
         List<RecompensadoEntity> recompensadoEntity;
+        int totalItems;
         if (search != null && !search.isEmpty()) {
             recompensadoEntity = recompensadoService.searchRecompensadoTrash(search, page -1, size);
+            totalItems = recompensadoService.totalRecompensadosTrashBySearch(search);
         } else {
             recompensadoEntity = recompensadoService.indexTrash(page -1, size);
+            totalItems = recompensadoService.totalRecompensados();
         }
-        int totalItems = recompensadoService.totalRecompensados();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);

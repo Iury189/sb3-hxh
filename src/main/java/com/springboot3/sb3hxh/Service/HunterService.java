@@ -142,6 +142,20 @@ public class HunterService implements HunterDAO {
     }
 
     @Override
+    public int totalHuntersBySearch(String search) {
+        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(h) FROM HunterEntity h WHERE h.deleted_at IS NULL AND LOWER(h.nome_hunter) LIKE LOWER(:search)", Long.class);
+        query.setParameter("search", "%" + search + "%");
+        return query.getSingleResult().intValue();
+    }
+
+    @Override
+    public int totalHuntersTrashBySearch(String search) {
+        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(h) FROM HunterEntity h WHERE h.deleted_at IS NOT NULL AND LOWER(h.nome_hunter) LIKE LOWER(:search)", Long.class);
+        query.setParameter("search", "%" + search + "%");
+        return query.getSingleResult().intValue();
+    }
+
+    @Override
     public boolean existsId(String id) {
         try {
             int idAsInt = Integer.parseInt(id);

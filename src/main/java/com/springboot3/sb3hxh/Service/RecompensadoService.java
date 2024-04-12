@@ -132,7 +132,29 @@ public class RecompensadoService implements RecompensadoDAO {
 
     @Override
     public int totalRecompensados() {
-        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(h) FROM RecompensadoEntity h", Long.class);
+        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(re) FROM RecompensadoEntity re", Long.class);
+        return query.getSingleResult().intValue();
+    }
+
+    @Override
+    public int totalRecompensadosBySearch(String search) {
+        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(re) FROM RecompensadoEntity re " +
+                "INNER JOIN re.hunter_id h " +
+                "INNER JOIN re.recompensa_id r " +
+                "WHERE re.deleted_at IS NULL " +
+                "AND (LOWER(h.nome_hunter) LIKE LOWER(:search) OR LOWER(r.descricao_recompensa) LIKE LOWER(:search))", Long.class);
+        query.setParameter("search", "%" + search + "%");
+        return query.getSingleResult().intValue();
+    }
+
+    @Override
+    public int totalRecompensadosTrashBySearch(String search) {
+        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(re) FROM RecompensadoEntity re " +
+                "INNER JOIN re.hunter_id h " +
+                "INNER JOIN re.recompensa_id r " +
+                "WHERE re.deleted_at IS NOT NULL " +
+                "AND (LOWER(h.nome_hunter) LIKE LOWER(:search) OR LOWER(r.descricao_recompensa) LIKE LOWER(:search))", Long.class);
+        query.setParameter("search", "%" + search + "%");
         return query.getSingleResult().intValue();
     }
 

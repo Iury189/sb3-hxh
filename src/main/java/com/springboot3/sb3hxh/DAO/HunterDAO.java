@@ -18,6 +18,8 @@ public interface HunterDAO {
     List<HunterEntity> searchHunter(String search, int page, int size);
     List<HunterEntity> searchHunterTrash(String search, int page, int size);
     int totalHunters();
+    int totalHuntersBySearch(String search);
+    int totalHuntersTrashBySearch(String search);
     boolean existsId(String id);
 
 }

@@ -18,6 +18,8 @@ public interface RecompensaDAO {
     List<RecompensaEntity> searchRecompensa(String search, int page, int size);
     List<RecompensaEntity> searchRecompensaTrash(String search, int page, int size);
     int totalRecompensas();
+    int totalRecompensasBySearch(String search);
+    int totalRecompensasTrashBySearch(String search);
     boolean existsId(String id);
 
 }

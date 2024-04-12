@@ -34,12 +34,14 @@ public class RecompensaController {
     @GetMapping("/filtrar-recompensa")
     public String filtrarRecompensa(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
         List<RecompensaEntity> recompensaEntity;
+        int totalItems;
         if (search != null && !search.isEmpty()) {
             recompensaEntity = recompensaService.searchRecompensa(search, page -1, size);
+            totalItems = recompensaService.totalRecompensasBySearch(search);
         } else {
             recompensaEntity = recompensaService.indexPagination(page -1, size);
+            totalItems = recompensaService.totalRecompensas();
         }
-        int totalItems = recompensaService.totalRecompensas();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
@@ -107,12 +109,14 @@ public class RecompensaController {
     @GetMapping("/filtrar-recompensa-trash")
     public String filtrarRecompensaTrash(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
         List<RecompensaEntity> recompensaEntity;
+        int totalItems;
         if (search != null && !search.isEmpty()) {
             recompensaEntity = recompensaService.searchRecompensaTrash(search, page -1, size);
+            totalItems = recompensaService.totalRecompensasTrashBySearch(search);
         } else {
             recompensaEntity = recompensaService.indexTrash(page -1, size);
+            totalItems = recompensaService.totalRecompensas();
         }
-        int totalItems = recompensaService.totalRecompensas();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);

@@ -40,12 +40,14 @@ public class HunterController {
     @GetMapping("/filtrar-hunter")
     public String filtrarHunter(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
         List<HunterEntity> hunterEntity;
+        int totalItems;
         if (search != null && !search.isEmpty()) {
             hunterEntity = hunterService.searchHunter(search, page -1, size);
+            totalItems = hunterService.totalHuntersBySearch(search);
         } else {
             hunterEntity = hunterService.indexPagination(page -1, size);
+            totalItems = hunterService.totalHunters();
         }
-        int totalItems = hunterService.totalHunters();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
@@ -136,12 +138,14 @@ public class HunterController {
     @GetMapping("/filtrar-hunter-trash")
     public String filtrarHunterTrash(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
         List<HunterEntity> hunterEntity;
+        int totalItems;
         if (search != null && !search.isEmpty()) {
             hunterEntity = hunterService.searchHunterTrash(search, page -1, size);
+            totalItems = hunterService.totalHuntersTrashBySearch(search);
         } else {
             hunterEntity = hunterService.indexTrash(page -1, size);
+            totalItems = hunterService.totalHunters();
         }
-        int totalItems = hunterService.totalHunters();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);

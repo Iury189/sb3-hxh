@@ -18,5 +18,7 @@ public interface RecompensadoDAO {
     List<RecompensadoEntity> searchRecompensado(String search, int page, int size);
     List<RecompensadoEntity> searchRecompensadoTrash(String search, int page, int size);
     int totalRecompensados();
+    int totalRecompensadosBySearch(String search);
+    int totalRecompensadosTrashBySearch(String search);
 
 }

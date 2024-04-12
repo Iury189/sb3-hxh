@@ -119,6 +119,20 @@ public class RecompensaService implements RecompensaDAO {
     }
 
     @Override
+    public int totalRecompensasBySearch(String search) {
+        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(r) FROM RecompensaEntity r WHERE r.deleted_at IS NULL AND LOWER(r.descricao_recompensa) LIKE LOWER(:search)", Long.class);
+        query.setParameter("search", "%" + search + "%");
+        return query.getSingleResult().intValue();
+    }
+
+    @Override
+    public int totalRecompensasTrashBySearch(String search) {
+        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(r) FROM RecompensaEntity r WHERE r.deleted_at IS NOT NULL AND LOWER(r.descricao_recompensa) LIKE LOWER(:search)", Long.class);
+        query.setParameter("search", "%" + search + "%");
+        return query.getSingleResult().intValue();
+    }
+
+    @Override
     public boolean existsId(String id) {
         try {
             int idAsInt = Integer.parseInt(id);
