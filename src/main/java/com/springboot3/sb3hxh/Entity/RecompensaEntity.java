@@ -2,17 +2,17 @@ package com.springboot3.sb3hxh.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
+import lombok.*;
 import java.text.*;
 import java.time.*;
 import java.util.*;
 
-@Entity
-@Table(name="recompensas")
+@Entity @Table(name="recompensas") @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class RecompensaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     @Column(name="id")
     private int id;
 
@@ -27,38 +27,16 @@ public class RecompensaEntity {
     private Float valor_recompensa;
 
     @Column(name = "deleted_at")
+    @Setter(AccessLevel.NONE)
     private LocalDateTime deleted_at;
-
-    public RecompensaEntity(){
-
-    }
-
-    public RecompensaEntity(int id, String descricao_recompensa, Float valor_recompensa, LocalDateTime deleted_at) {
-        this.id = id;
-        this.descricao_recompensa = descricao_recompensa;
-        this.valor_recompensa = valor_recompensa;
-        this.deleted_at = deleted_at;
-    }
-
-    public int getId() { return id; }
 
     public void setId(int id) { this.id = id; }
 
-    public String getDescricao_recompensa() { return descricao_recompensa; }
-
-    public void setDescricao_recompensa(String descricao_recompensa) { this.descricao_recompensa = descricao_recompensa; }
-
-    public Float getValor_recompensa() { return valor_recompensa; }
-
-    public void setValor_recompensa(Float valor_recompensa) { this.valor_recompensa = valor_recompensa; }
-
-    public LocalDateTime getDeletedAt() { return deleted_at; }
-
-    public void setDeletedAt(LocalDateTime deleted_at) { this.deleted_at = deleted_at; }
+    public void setDeletedAt(LocalDateTime deletedAt) { this.deleted_at = deletedAt; }
 
     public String valorRecompensaFormatado() {
         NumberFormat format = DecimalFormat.getCurrencyInstance(new Locale("pt", "BR"));
-        return format.format(this.getValor_recompensa());
+        return format.format(this.valor_recompensa);
     }
 
 }

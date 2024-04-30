@@ -2,15 +2,15 @@ package com.springboot3.sb3hxh.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
+import lombok.*;
 import java.time.*;
 
-@Entity
-@Table(name="tipos_nens")
+@Entity @Table(name="tipos_nens") @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class TipoNenEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     @Column(name="id")
     private int id;
 
@@ -19,27 +19,11 @@ public class TipoNenEntity {
     private String descricao;
 
     @Column(name = "deleted_at")
+    @Setter(AccessLevel.NONE)
     private LocalDateTime deleted_at;
-
-    public TipoNenEntity() {
-    }
-
-    public TipoNenEntity(int id, String descricao, LocalDateTime deleted_at) {
-        this.id = id;
-        this.descricao = descricao;
-        this.deleted_at = deleted_at;
-    }
-
-    public int getId() { return id; }
 
     public void setId(int id) { this.id = id; }
 
-    public String getDescricao() { return descricao; }
-
-    public void setDescricao(String descricao) { this.descricao = descricao; }
-
-    public LocalDateTime getDeleted_at() { return deleted_at; }
-
-    public void setDeleted_at(LocalDateTime deleted_at) { this.deleted_at = deleted_at; }
+    public void setDeletedAt(LocalDateTime deletedAt) { this.deleted_at = deletedAt; }
 
 }
