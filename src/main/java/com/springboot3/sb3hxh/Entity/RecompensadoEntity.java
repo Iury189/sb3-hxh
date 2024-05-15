@@ -1,6 +1,5 @@
 package com.springboot3.sb3hxh.Entity;
 
-import com.springboot3.sb3hxh.Validation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -23,6 +22,7 @@ public class RecompensadoEntity {
 
     @OneToOne
     @NotNull(message = "Recompensa é requerida")
+    @Getter(AccessLevel.NONE)
     @JoinColumn(name="recompensa_id", referencedColumnName="id")
     private RecompensaEntity recompensa_id;
 
@@ -35,6 +35,8 @@ public class RecompensadoEntity {
     private LocalDateTime deleted_at;
 
     public void setId(int id) { this.id = id; }
+
+    public RecompensaEntity getRecompensa_id() { return recompensa_id; }
 
     public void setDeletedAt(LocalDateTime deletedAt) { this.deleted_at = deletedAt; }
 

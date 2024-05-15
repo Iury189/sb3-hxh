@@ -15,7 +15,7 @@
     <h3>Lixeira de recompensados</h3>
     <hr>
     <a href="/recompensados/list" class="btn btn-secondary btn-sm mb-3"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
-    <form th:action="@{/recompensados/filtrar-recompensado-trash}" method="get" class="mb-3">
+    <form th:action="@{/recompensados/filtrar-recompensado-trash}" th:value="${search}" method="get" class="mb-3">
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Buscar nome do Hunter ou descrição da recompensa" name="search">
             <button type="submit" class="btn btn-primary"><i class="fa fa-magnifying-glass"></i>&nbsp;Buscar</button>
@@ -44,10 +44,10 @@
         </tr>
         </tbody>
     </table>
-    <div class="pagination justify-content-center">
+    <div class="pagination justify-content-center" th:if="${totalPages > 0}">
         <ul class="pagination">
-            <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == i} ? 'active' : ''">
-                <a class="page-link" th:href="@{'/recompensados/trash-list-recompensado?page=' + ${i}}">[[${i}]]</a>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${currentPage == i} ? 'active' : ''">
+                <a class="page-link" th:href="@{'/recompensados/trash-list-recompensado?page=' + ${i}}">[[${i + 1}]]</a>
             </li>
         </ul>
     </div>

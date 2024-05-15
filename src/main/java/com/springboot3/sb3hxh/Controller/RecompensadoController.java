@@ -3,6 +3,7 @@ package com.springboot3.sb3hxh.Controller;
 import com.springboot3.sb3hxh.Entity.*;
 import com.springboot3.sb3hxh.Service.*;
 import jakarta.validation.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.validation.*;
@@ -25,31 +26,26 @@ public class RecompensadoController {
     }
 
     @GetMapping("/list")
-    public String listarRecompensados(Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
-        List<RecompensadoEntity> recompensadoEntity = recompensadoService.indexPagination(page -1, size);
-        int totalItems = recompensadoService.totalRecompensados();
-        int totalPages = (int) Math.ceil((double) totalItems / size);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("recompensados", recompensadoEntity);
+    public String listarRecompensados(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
+        Page<RecompensadoEntity> recompensadoPage = recompensadoService.indexPagination(page, size);
+        model.addAttribute("recompensados", recompensadoPage.getContent());
+        model.addAttribute("currentPage", recompensadoPage.getNumber());
+        model.addAttribute("totalPages", recompensadoPage.getTotalPages());
         return "/recompensado/list-recompensados";
     }
 
     @GetMapping("/filtrar-recompensado")
-    public String filtrarRecompensado(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
-        List<RecompensadoEntity> recompensadoEntity;
-        int totalItems;
+    public String filtrarRecompensado(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
+        Page<RecompensadoEntity> recompensadoPage;
         if (search != null && !search.isEmpty()) {
-            recompensadoEntity = recompensadoService.searchRecompensado(search, page -1, size);
-            totalItems = recompensadoService.totalRecompensadosBySearch(search);
+            recompensadoPage = recompensadoService.searchRecompensado(search, page, size);
         } else {
-            recompensadoEntity = recompensadoService.indexPagination(page -1, size);
-            totalItems = recompensadoService.totalRecompensados();
+            recompensadoPage = recompensadoService.indexPagination(page, size);
         }
-        int totalPages = (int) Math.ceil((double) totalItems / size);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("recompensados", recompensadoEntity);
+        model.addAttribute("recompensados", recompensadoPage.getContent());
+        model.addAttribute("currentPage", recompensadoPage.getNumber());
+        model.addAttribute("totalPages", recompensadoPage.getTotalPages());
+        model.addAttribute("search", search);
         return "/recompensado/list-recompensados";
     }
 
@@ -167,31 +163,26 @@ public class RecompensadoController {
     }
 
     @GetMapping("/trash-list-recompensado")
-    public String listarTrashRecompensados(Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
-        List<RecompensadoEntity> recompensadoEntity = recompensadoService.indexTrash(page -1, size);
-        int totalItems = recompensadoService.totalRecompensados();
-        int totalPages = (int) Math.ceil((double) totalItems / size);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("recompensados", recompensadoEntity);
+    public String listarTrashRecompensados(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
+        Page<RecompensadoEntity> recompensadoPage = recompensadoService.indexTrash(page, size);
+        model.addAttribute("recompensados", recompensadoPage.getContent());
+        model.addAttribute("currentPage", recompensadoPage.getNumber());
+        model.addAttribute("totalPages", recompensadoPage.getTotalPages());
         return "/recompensado/trash-recompensado";
     }
 
     @GetMapping("/filtrar-recompensado-trash")
-    public String filtrarRecompensadoTrash(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int size){
-        List<RecompensadoEntity> recompensadoEntity;
-        int totalItems;
+    public String filtrarRecompensadoTrash(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
+        Page<RecompensadoEntity> recompensadoPage;
         if (search != null && !search.isEmpty()) {
-            recompensadoEntity = recompensadoService.searchRecompensadoTrash(search, page -1, size);
-            totalItems = recompensadoService.totalRecompensadosTrashBySearch(search);
+            recompensadoPage = recompensadoService.searchRecompensadoTrash(search, page, size);
         } else {
-            recompensadoEntity = recompensadoService.indexTrash(page -1, size);
-            totalItems = recompensadoService.totalRecompensados();
+            recompensadoPage = recompensadoService.indexTrash(page, size);
         }
-        int totalPages = (int) Math.ceil((double) totalItems / size);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("recompensados", recompensadoEntity);
+        model.addAttribute("recompensados", recompensadoPage.getContent());
+        model.addAttribute("currentPage", recompensadoPage.getNumber());
+        model.addAttribute("totalPages", recompensadoPage.getTotalPages());
+        model.addAttribute("search", search);
         return "/recompensado/trash-recompensado";
     }
 

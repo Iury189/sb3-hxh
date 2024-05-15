@@ -4,6 +4,7 @@ import com.springboot3.sb3hxh.DAO.*;
 import com.springboot3.sb3hxh.Entity.*;
 import jakarta.persistence.*;
 import jakarta.transaction.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.time.*;
@@ -30,19 +31,24 @@ public class RecompensadoService implements RecompensadoDAO {
     }
 
     @Override
-    public List<RecompensadoEntity> indexPagination(int page, int size) {
+    public Page<RecompensadoEntity> indexPagination(int page, int size) {
         TypedQuery<RecompensadoEntity> query = entityManager.createQuery("SELECT re FROM RecompensadoEntity re " +
                 "INNER JOIN FETCH re.hunter_id h " +
                 "INNER JOIN FETCH re.recompensa_id r " +
                 "WHERE re.deleted_at IS NULL " +
                 "ORDER BY re.id ASC", RecompensadoEntity.class);
+        long totalCount = entityManager.createQuery("SELECT COUNT(r) FROM RecompensadoEntity r WHERE r.deleted_at IS NULL", Long.class).getSingleResult();
+        if (totalCount == 0) {
+            return Page.empty(PageRequest.of(page, size));
+        }
         query.setFirstResult(page * size);
         query.setMaxResults(size);
-        return query.getResultList();
+        List<RecompensadoEntity> recompensados = query.getResultList();
+        return new PageImpl<>(recompensados, PageRequest.of(page, size), totalCount);
     }
 
     @Override
-    public List<RecompensadoEntity> searchRecompensado(String search, int page, int size) {
+    public Page<RecompensadoEntity> searchRecompensado(String search, int page, int size) {
         TypedQuery<RecompensadoEntity> query = entityManager.createQuery("SELECT re FROM RecompensadoEntity re " +
                 "INNER JOIN FETCH re.hunter_id h " +
                 "INNER JOIN FETCH re.recompensa_id r " +
@@ -50,9 +56,20 @@ public class RecompensadoService implements RecompensadoDAO {
                 "AND (LOWER(h.nome_hunter) LIKE LOWER(:search) OR LOWER(r.descricao_recompensa) LIKE LOWER(:search)) " +
                 "ORDER BY re.id ASC ", RecompensadoEntity.class);
         query.setParameter("search", "%" + search + "%");
+        long totalCount = entityManager.createQuery("SELECT COUNT(re) FROM RecompensadoEntity re " +
+                "INNER JOIN re.hunter_id h " +
+                "INNER JOIN re.recompensa_id r " +
+                "WHERE re.deleted_at IS NULL " +
+                "AND (LOWER(h.nome_hunter) LIKE LOWER(:search) OR LOWER(r.descricao_recompensa) LIKE LOWER(:search))", Long.class)
+                .setParameter("search", "%" + search + "%")
+                .getSingleResult();
+        if (totalCount == 0) {
+            return Page.empty(PageRequest.of(page, size));
+        }
         query.setFirstResult(page * size);
         query.setMaxResults(size);
-        return query.getResultList();
+        List<RecompensadoEntity> recompensados = query.getResultList();
+        return new PageImpl<>(recompensados, PageRequest.of(page, size), totalCount);
     }
 
     @Override
@@ -85,19 +102,21 @@ public class RecompensadoService implements RecompensadoDAO {
     }
 
     @Override
-    public List<RecompensadoEntity> indexTrash(int page, int size) {
+    public Page<RecompensadoEntity> indexTrash(int page, int size) {
         TypedQuery<RecompensadoEntity> query = entityManager.createQuery("SELECT re FROM RecompensadoEntity re " +
                 "INNER JOIN FETCH re.hunter_id h " +
                 "INNER JOIN FETCH re.recompensa_id r " +
                 "WHERE re.deleted_at IS NOT NULL " +
                 "ORDER BY re.id ASC", RecompensadoEntity.class);
+        long totalCount = entityManager.createQuery("SELECT COUNT(r) FROM RecompensadoEntity r WHERE r.deleted_at IS NOT NULL", Long.class).getSingleResult();
         query.setFirstResult(page * size);
         query.setMaxResults(size);
-        return query.getResultList();
+        List<RecompensadoEntity> recompensados = query.getResultList();
+        return new PageImpl<>(recompensados, PageRequest.of(page, size), totalCount);
     }
 
     @Override
-    public List<RecompensadoEntity> searchRecompensadoTrash(String search, int page, int size) {
+    public Page<RecompensadoEntity> searchRecompensadoTrash(String search, int page, int size) {
         TypedQuery<RecompensadoEntity> query = entityManager.createQuery("SELECT re FROM RecompensadoEntity re " +
                 "INNER JOIN FETCH re.hunter_id h " +
                 "INNER JOIN FETCH re.recompensa_id r " +
@@ -105,9 +124,17 @@ public class RecompensadoService implements RecompensadoDAO {
                 "AND (LOWER(h.nome_hunter) LIKE LOWER(:search) OR LOWER(r.descricao_recompensa) LIKE LOWER(:search)) " +
                 "ORDER BY re.id ASC ", RecompensadoEntity.class);
         query.setParameter("search", "%" + search + "%");
+        long totalCount = entityManager.createQuery("SELECT COUNT(re) FROM RecompensadoEntity re " +
+                        "INNER JOIN re.hunter_id h " +
+                        "INNER JOIN re.recompensa_id r " +
+                        "WHERE re.deleted_at IS NOT NULL " +
+                        "AND (LOWER(h.nome_hunter) LIKE LOWER(:search) OR LOWER(r.descricao_recompensa) LIKE LOWER(:search))", Long.class)
+                .setParameter("search", "%" + search + "%")
+                .getSingleResult();
         query.setFirstResult(page * size);
         query.setMaxResults(size);
-        return query.getResultList();
+        List<RecompensadoEntity> recompensados = query.getResultList();
+        return new PageImpl<>(recompensados, PageRequest.of(page, size), totalCount);
     }
 
     @Override
@@ -128,34 +155,6 @@ public class RecompensadoService implements RecompensadoDAO {
     public void delete(int id) {
         RecompensadoEntity recompensadoEntity = entityManager.find(RecompensadoEntity.class,id);
         entityManager.remove(recompensadoEntity);
-    }
-
-    @Override
-    public int totalRecompensados() {
-        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(re) FROM RecompensadoEntity re", Long.class);
-        return query.getSingleResult().intValue();
-    }
-
-    @Override
-    public int totalRecompensadosBySearch(String search) {
-        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(re) FROM RecompensadoEntity re " +
-                "INNER JOIN re.hunter_id h " +
-                "INNER JOIN re.recompensa_id r " +
-                "WHERE re.deleted_at IS NULL " +
-                "AND (LOWER(h.nome_hunter) LIKE LOWER(:search) OR LOWER(r.descricao_recompensa) LIKE LOWER(:search))", Long.class);
-        query.setParameter("search", "%" + search + "%");
-        return query.getSingleResult().intValue();
-    }
-
-    @Override
-    public int totalRecompensadosTrashBySearch(String search) {
-        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(re) FROM RecompensadoEntity re " +
-                "INNER JOIN re.hunter_id h " +
-                "INNER JOIN re.recompensa_id r " +
-                "WHERE re.deleted_at IS NOT NULL " +
-                "AND (LOWER(h.nome_hunter) LIKE LOWER(:search) OR LOWER(r.descricao_recompensa) LIKE LOWER(:search))", Long.class);
-        query.setParameter("search", "%" + search + "%");
-        return query.getSingleResult().intValue();
     }
 
 }

@@ -3,6 +3,9 @@ package com.springboot3.sb3hxh.Service;
 import com.springboot3.sb3hxh.DAO.*;
 import com.springboot3.sb3hxh.Entity.*;
 import jakarta.persistence.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.*;
 import jakarta.transaction.*;
 
@@ -26,22 +29,28 @@ public class RecompensaService implements RecompensaDAO {
     }
 
     @Override
-    public List<RecompensaEntity> indexPagination(int page, int size) {
+    public Page<RecompensaEntity> indexPagination(int page, int size) {
         TypedQuery<RecompensaEntity> query = entityManager.createQuery("SELECT r FROM RecompensaEntity r WHERE r.deleted_at IS NULL ORDER BY r.id ASC", RecompensaEntity.class);
+        long totalCount = entityManager.createQuery("SELECT COUNT(r) FROM RecompensaEntity r WHERE r.deleted_at IS NULL", Long.class).getSingleResult();
         query.setFirstResult(page * size);
         query.setMaxResults(size);
-        return query.getResultList();
+        List<RecompensaEntity> recompensas = query.getResultList();
+        return new PageImpl<>(recompensas, PageRequest.of(page, size), totalCount);
     }
 
-    public List<RecompensaEntity> searchRecompensa(String search, int page, int size) {
+    public Page<RecompensaEntity> searchRecompensa(String search, int page, int size) {
         TypedQuery<RecompensaEntity> query = entityManager.createQuery("SELECT r FROM RecompensaEntity r " +
                 "WHERE r.deleted_at IS NULL " +
                 "AND LOWER(r.descricao_recompensa) LIKE LOWER(:search) " +
                 "ORDER BY r.id ASC", RecompensaEntity.class);
         query.setParameter("search", "%" + search + "%");
+        long totalCount = entityManager.createQuery("SELECT COUNT(r) FROM RecompensaEntity r WHERE r.deleted_at IS NULL AND LOWER(r.descricao_recompensa) LIKE LOWER(:search)", Long.class)
+                .setParameter("search", "%" + search + "%")
+                .getSingleResult();
         query.setFirstResult(page * size);
         query.setMaxResults(size);
-        return query.getResultList();
+        List<RecompensaEntity> recompensas = query.getResultList();
+        return new PageImpl<>(recompensas, PageRequest.of(page, size), totalCount);
     }
 
     @Override
@@ -74,22 +83,28 @@ public class RecompensaService implements RecompensaDAO {
     }
 
     @Override
-    public List<RecompensaEntity> indexTrash(int page, int size) {
+    public Page<RecompensaEntity> indexTrash(int page, int size) {
         TypedQuery<RecompensaEntity> query = entityManager.createQuery("SELECT r FROM RecompensaEntity r WHERE r.deleted_at IS NOT NULL ORDER BY r.id ASC", RecompensaEntity.class);
+        long totalCount = entityManager.createQuery("SELECT COUNT(r) FROM RecompensaEntity r WHERE r.deleted_at IS NOT NULL", Long.class).getSingleResult();
         query.setFirstResult(page * size);
         query.setMaxResults(size);
-        return query.getResultList();
+        List<RecompensaEntity> recompensas = query.getResultList();
+        return new PageImpl<>(recompensas, PageRequest.of(page, size), totalCount);
     }
 
-    public List<RecompensaEntity> searchRecompensaTrash(String search, int page, int size) {
+    public Page<RecompensaEntity> searchRecompensaTrash(String search, int page, int size) {
         TypedQuery<RecompensaEntity> query = entityManager.createQuery("SELECT r FROM RecompensaEntity r " +
                 "WHERE r.deleted_at IS NOT NULL " +
                 "AND LOWER(r.descricao_recompensa) LIKE LOWER(:search) " +
                 "ORDER BY r.id ASC", RecompensaEntity.class);
         query.setParameter("search", "%" + search + "%");
+        long totalCount = entityManager.createQuery("SELECT COUNT(r) FROM RecompensaEntity r WHERE r.deleted_at IS NOT NULL AND LOWER(r.descricao_recompensa) LIKE LOWER(:search)", Long.class)
+                .setParameter("search", "%" + search + "%")
+                .getSingleResult();
         query.setFirstResult(page * size);
         query.setMaxResults(size);
-        return query.getResultList();
+        List<RecompensaEntity> recompensas = query.getResultList();
+        return new PageImpl<>(recompensas, PageRequest.of(page, size), totalCount);
     }
 
     @Override
@@ -110,26 +125,6 @@ public class RecompensaService implements RecompensaDAO {
     public void delete(int id) {
         RecompensaEntity recompensaEntity = entityManager.find(RecompensaEntity.class,id);
         entityManager.remove(recompensaEntity);
-    }
-
-    @Override
-    public int totalRecompensas() {
-        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(h) FROM RecompensaEntity h", Long.class);
-        return query.getSingleResult().intValue();
-    }
-
-    @Override
-    public int totalRecompensasBySearch(String search) {
-        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(r) FROM RecompensaEntity r WHERE r.deleted_at IS NULL AND LOWER(r.descricao_recompensa) LIKE LOWER(:search)", Long.class);
-        query.setParameter("search", "%" + search + "%");
-        return query.getSingleResult().intValue();
-    }
-
-    @Override
-    public int totalRecompensasTrashBySearch(String search) {
-        TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(r) FROM RecompensaEntity r WHERE r.deleted_at IS NOT NULL AND LOWER(r.descricao_recompensa) LIKE LOWER(:search)", Long.class);
-        query.setParameter("search", "%" + search + "%");
-        return query.getSingleResult().intValue();
     }
 
     @Override
