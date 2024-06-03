@@ -36,12 +36,7 @@ public class RecompensadoController {
 
     @GetMapping("/filtrar-recompensado")
     public String filtrarRecompensado(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
-        Page<RecompensadoEntity> recompensadoPage;
-        if (search != null && !search.isEmpty()) {
-            recompensadoPage = recompensadoService.searchRecompensado(search, page, size);
-        } else {
-            recompensadoPage = recompensadoService.indexPagination(page, size);
-        }
+        Page<RecompensadoEntity> recompensadoPage = (search != null && !search.isEmpty()) ? recompensadoService.searchRecompensado(search, page, size) : recompensadoService.indexPagination(page, size);
         model.addAttribute("recompensados", recompensadoPage.getContent());
         model.addAttribute("currentPage", recompensadoPage.getNumber());
         model.addAttribute("totalPages", recompensadoPage.getTotalPages());
@@ -97,7 +92,7 @@ public class RecompensadoController {
             return "/recompensado/create-recompensado";
         } else {
             recompensadoService.create(recompensadoEntity);
-            return "redirect:/recompensados/list";
+            return "redirect:/recompensados/list?page=0&size=5";
         }
     }
 
@@ -125,7 +120,7 @@ public class RecompensadoController {
         if (recompensadoEntity != null) {
             return "/recompensado/update-recompensado";
         } else {
-            return "redirect:/recompensados/list";
+            return "redirect:/recompensados/list?page=0&size=5";
         }
     }
 
@@ -153,14 +148,14 @@ public class RecompensadoController {
         } else {
             recompensadoEntity.setId(id);
             recompensadoService.update(recompensadoEntity);
-            return "redirect:/recompensados/list";
+            return "redirect:/recompensados/list?page=0&size=5";
         }
     }
 
     @GetMapping("/trash-recompensado/{id}")
     public String trashRecompensado(@PathVariable("id") int id) {
         recompensadoService.trash(id);
-        return "redirect:/recompensados/list";
+        return "redirect:/recompensados/list?page=0&size=5";
     }
 
     @GetMapping("/trash-list-recompensado")
@@ -174,12 +169,7 @@ public class RecompensadoController {
 
     @GetMapping("/filtrar-recompensado-trash")
     public String filtrarRecompensadoTrash(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
-        Page<RecompensadoEntity> recompensadoPage;
-        if (search != null && !search.isEmpty()) {
-            recompensadoPage = recompensadoService.searchRecompensadoTrash(search, page, size);
-        } else {
-            recompensadoPage = recompensadoService.indexTrash(page, size);
-        }
+        Page<RecompensadoEntity> recompensadoPage = (search != null && !search.isEmpty()) ? recompensadoService.searchRecompensadoTrash(search, page, size) : recompensadoService.indexTrash(page, size);
         model.addAttribute("recompensados", recompensadoPage.getContent());
         model.addAttribute("currentPage", recompensadoPage.getNumber());
         model.addAttribute("totalPages", recompensadoPage.getTotalPages());
@@ -191,13 +181,13 @@ public class RecompensadoController {
     @GetMapping("/restore-recompensado/{id}")
     public String restoreRecompensado(@PathVariable("id") int id, Model model) {
         recompensadoService.restore(id);
-        return "redirect:/recompensados/trash-list-recompensado";
+        return "redirect:/recompensados/trash-list-recompensado?page=0&size=5";
     }
 
     @GetMapping("/delete-recompensado/{id}")
     public String deleteRecompensado(@PathVariable("id") int id) {
         recompensadoService.delete(id);
-        return "redirect:/recompensados/trash-list-recompensado";
+        return "redirect:/recompensados/trash-list-recompensado?page=0&size=5";
     }
 
 }

@@ -38,12 +38,7 @@ public class HunterController {
 
     @GetMapping("/filtrar-hunter")
     public String filtrarHunter(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
-        Page<HunterEntity> hunterPage;
-        if (search != null && !search.isEmpty()) {
-            hunterPage = hunterService.searchHunter(search, page, size);
-        } else {
-            hunterPage = hunterService.indexPagination(page, size);
-        }
+        Page<HunterEntity> hunterPage = (search != null && !search.isEmpty()) ? hunterService.searchHunter(search, page, size) : hunterService.indexPagination(page, size);
         model.addAttribute("hunters", hunterPage.getContent());
         model.addAttribute("currentPage", hunterPage.getNumber());
         model.addAttribute("totalPages", hunterPage.getTotalPages());
@@ -77,7 +72,7 @@ public class HunterController {
             return "/hunter/create-hunter";
         } else {
             hunterService.create(hunterEntity);
-            return "redirect:/hunters/list";
+            return "redirect:/hunters/list?page=0&size=5";
         }
     }
 
@@ -94,7 +89,7 @@ public class HunterController {
         if (hunterEntity != null) {
             return "/hunter/update-hunter";
         } else {
-            return "redirect:/hunters/list";
+            return "redirect:/hunters/list?page=0&size=5";
         }
     }
 
@@ -111,14 +106,14 @@ public class HunterController {
         } else {
             hunterEntity.setId(id);
             hunterService.update(hunterEntity);
-            return "redirect:/hunters/list";
+            return "redirect:/hunters/list?page=0&size=5";
         }
     }
 
     @GetMapping("/trash-hunter/{id}")
     public String trashHunter(@PathVariable("id") int id) {
         hunterService.trash(id);
-        return "redirect:/hunters/list";
+        return "redirect:/hunters/list?page=0&size=5";
     }
 
     @GetMapping("/trash-list-hunter")
@@ -132,12 +127,7 @@ public class HunterController {
 
     @GetMapping("/filtrar-hunter-trash")
     public String filtrarHunterTrash(@RequestParam(name = "search", required = false) String search, Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
-        Page<HunterEntity> hunterPage;
-        if (search != null && !search.isEmpty()) {
-            hunterPage = hunterService.searchHunterTrash(search, page, size);
-        } else {
-            hunterPage = hunterService.indexTrash(page, size);
-        }
+        Page<HunterEntity> hunterPage = (search != null && !search.isEmpty()) ? hunterService.searchHunterTrash(search, page, size) : hunterService.indexTrash(page, size);
         model.addAttribute("hunters", hunterPage.getContent());
         model.addAttribute("currentPage", hunterPage.getNumber());
         model.addAttribute("totalPages", hunterPage.getTotalPages());
@@ -149,13 +139,13 @@ public class HunterController {
     @GetMapping("/restore-hunter/{id}")
     public String restoreHunter(@PathVariable("id") int id, Model model) {
         hunterService.restore(id);
-        return "redirect:/hunters/trash-list-hunter";
+        return "redirect:/hunters/trash-list-hunter?page=0&size=5";
     }
 
     @GetMapping("/delete-hunter/{id}")
     public String deleteHunter(@PathVariable("id") int id) {
         hunterService.delete(id);
-        return "redirect:/hunters/trash-list-hunter";
+        return "redirect:/hunters/trash-list-hunter?page=0&size=5";
     }
 
 }
