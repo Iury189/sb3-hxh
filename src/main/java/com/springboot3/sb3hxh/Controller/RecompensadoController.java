@@ -46,6 +46,7 @@ public class RecompensadoController {
         model.addAttribute("currentPage", recompensadoPage.getNumber());
         model.addAttribute("totalPages", recompensadoPage.getTotalPages());
         model.addAttribute("search", search);
+        model.addAttribute("size", size);
         return "/recompensado/list-recompensados";
     }
 
@@ -183,6 +184,7 @@ public class RecompensadoController {
         model.addAttribute("currentPage", recompensadoPage.getNumber());
         model.addAttribute("totalPages", recompensadoPage.getTotalPages());
         model.addAttribute("search", search);
+        model.addAttribute("size", size);
         return "/recompensado/trash-recompensado";
     }
 

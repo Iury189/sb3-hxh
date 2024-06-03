@@ -48,6 +48,7 @@ public class HunterController {
         model.addAttribute("currentPage", hunterPage.getNumber());
         model.addAttribute("totalPages", hunterPage.getTotalPages());
         model.addAttribute("search", search);
+        model.addAttribute("size", size);
         return "/hunter/list-hunters";
     }
 
@@ -141,6 +142,7 @@ public class HunterController {
         model.addAttribute("currentPage", hunterPage.getNumber());
         model.addAttribute("totalPages", hunterPage.getTotalPages());
         model.addAttribute("search", search);
+        model.addAttribute("size", size);
         return "/hunter/trash-hunter";
     }
 

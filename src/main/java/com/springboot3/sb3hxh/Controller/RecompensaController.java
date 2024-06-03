@@ -42,6 +42,7 @@ public class RecompensaController {
         model.addAttribute("currentPage", recompensaPage.getNumber());
         model.addAttribute("totalPages", recompensaPage.getTotalPages());
         model.addAttribute("search", search);
+        model.addAttribute("size", size);
         return "/recompensa/list-recompensas";
     }
 
@@ -112,6 +113,7 @@ public class RecompensaController {
         model.addAttribute("currentPage", recompensaPage.getNumber());
         model.addAttribute("totalPages", recompensaPage.getTotalPages());
         model.addAttribute("search", search);
+        model.addAttribute("size", size);
         return "/recompensa/trash-recompensa";
     }
 
