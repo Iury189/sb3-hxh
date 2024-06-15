@@ -52,7 +52,7 @@ CREATE TABLE hunters (
 );
 
 CREATE TABLE recompensas (
-	id serial SERIAL PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	descricao_recompensa VARCHAR(255) NOT NULL,
 	valor_recompensa DECIMAL(10,2) NOT NULL,
 	deleted_at TIMESTAMP
@@ -89,6 +89,24 @@ CREATE TABLE tipos_sanguineos (
 
 - Create tables to **MySQL**
 ```
+CREATE TABLE tipos_hunters (
+	id PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	descricao VARCHAR(50) NOT NULL,
+	deleted_at TIMESTAMP
+);
+
+CREATE TABLE tipos_nens (
+	id PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	descricao VARCHAR(15) NOT NULL,
+	deleted_at TIMESTAMP
+);
+
+CREATE TABLE tipos_sanguineos (
+	id PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	descricao VARCHAR(3) NOT NULL,
+	deleted_at TIMESTAMP
+);
+
 CREATE TABLE hunters (
 	id PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	nome_hunter VARCHAR(50) NOT NULL,
@@ -121,24 +139,6 @@ CREATE TABLE recompensados (
 	deleted_at TIMESTAMP,
 	FOREIGN KEY (hunter_id) REFERENCES hunters (id),
 	FOREIGN KEY (recompensa_id) REFERENCES recompensas (id)
-);
-
-CREATE TABLE tipos_hunters (
-	id PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	descricao VARCHAR(50) NOT NULL,
-	deleted_at TIMESTAMP
-);
-
-CREATE TABLE tipos_nens (
-	id PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	descricao VARCHAR(15) NOT NULL,
-	deleted_at TIMESTAMP
-);
-
-CREATE TABLE tipos_sanguineos (
-	id PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	descricao VARCHAR(3) NOT NULL,
-	deleted_at TIMESTAMP
 );
 ```
 

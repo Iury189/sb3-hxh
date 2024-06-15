@@ -86,11 +86,7 @@ public class HunterController {
         model.addAttribute("tipo_hunter", tipoHunterEntity);
         model.addAttribute("tipo_nen", tipoNenEntity);
         model.addAttribute("tipo_sanguineo", tipoSanguineoEntity);
-        if (hunterEntity != null) {
-            return "/hunter/update-hunter";
-        } else {
-            return "redirect:/hunters/list?page=0&size=5";
-        }
+        return hunterEntity != null ? "/hunter/update-hunter" : "redirect:/hunters/list?page=0&size=5";
     }
 
     @PostMapping("/update-hunter/{id}")
