@@ -1,20 +1,20 @@
-- Define settings database in ```application.properties```
+- Define settings database in ```application.properties``` (Check the database name, user and password of your preference)
 
 ```
 # PostgreSQL
-spring.datasource.url=jdbc:postgresql://localhost:5432/sb3-hxh
+spring.datasource.url=jdbc:postgresql://localhost:5432/database_name
 spring.datasource.username=postgres
 spring.datasource.password=
 spring.datasource.driver-class-name=org.postgresql.Driver
 
 # MySQL
-spring.datasource.mysql.url=jdbc:mysql://localhost:3306/sb3-hxh
+spring.datasource.mysql.url=jdbc:mysql://localhost:3306/database_name
 spring.datasource.mysql.username=root
 spring.datasource.mysql.password=
 spring.datasource.mysql.driver-class-name=com.mysql.cj.jdbc.Driver
 ```
 
-- Create table to **PostgreSQL**
+- Create table to **PostgreSQL** database
 ```
 CREATE TABLE tipos_hunters (
 	id SERIAL PRIMARY KEY,
@@ -87,7 +87,7 @@ CREATE TABLE tipos_sanguineos (
 );
 ```
 
-- Create tables to **MySQL**
+- Create tables to **MySQL** database
 ```
 CREATE TABLE tipos_hunters (
 	id PRIMARY KEY NOT NULL AUTO_INCREMENT,
