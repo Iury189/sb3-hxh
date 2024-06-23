@@ -8,6 +8,7 @@ import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.*;
 
 import java.util.*;
 
@@ -15,6 +16,7 @@ import java.util.*;
 @RequestMapping("/hunters")
 public class HunterController {
 
+    private static final Logger log = LoggerFactory.getLogger(HunterController.class);
     private HunterService hunterService;
     private TipoHunterService tipoHunterService;
     private TipoSanguineoService tipoSanguineoService;
@@ -69,9 +71,11 @@ public class HunterController {
         model.addAttribute("tipo_nen", tipoNenEntity);
         model.addAttribute("tipo_sanguineo", tipoSanguineoEntity);
         if (bindingResult.hasErrors()) {
+            log.warn("Erros de validações encontrados no formulário: {}", bindingResult.getAllErrors());
             return "/hunter/create-hunter";
         } else {
             hunterService.create(hunterEntity);
+            log.info("Novo Hunter criado(a): {}", hunterEntity);
             return "redirect:/hunters/list?page=0&size=5";
         }
     }
@@ -98,10 +102,12 @@ public class HunterController {
         model.addAttribute("tipo_nen", tipoNenEntity);
         model.addAttribute("tipo_sanguineo", tipoSanguineoEntity);
         if (bindingResult.hasErrors()) {
+            log.warn("Erros de validações encontrados no formulário: {}", bindingResult.getAllErrors());
             return "/hunter/update-hunter";
         } else {
             hunterEntity.setId(id);
             hunterService.update(hunterEntity);
+            log.info("Alterando Hunter ID Nº{} com novas informações: {}", id, hunterEntity);
             return "redirect:/hunters/list?page=0&size=5";
         }
     }
@@ -109,6 +115,7 @@ public class HunterController {
     @GetMapping("/trash-hunter/{id}")
     public String trashHunter(@PathVariable("id") int id) {
         hunterService.trash(id);
+        log.info("Hunter ID Nº{} foi enviado(a) para a lixeira.", id);
         return "redirect:/hunters/list?page=0&size=5";
     }
 
@@ -133,14 +140,16 @@ public class HunterController {
     }
 
     @GetMapping("/restore-hunter/{id}")
-    public String restoreHunter(@PathVariable("id") int id, Model model) {
+    public String restoreHunter(@PathVariable("id") int id) {
         hunterService.restore(id);
+        log.info("Hunter ID Nº{} foi restaurado(a) para a listagem principal.", id);
         return "redirect:/hunters/trash-list-hunter?page=0&size=5";
     }
 
     @GetMapping("/delete-hunter/{id}")
     public String deleteHunter(@PathVariable("id") int id) {
         hunterService.delete(id);
+        log.info("Hunter ID Nº{} foi excluído(a) permanentemente.", id);
         return "redirect:/hunters/trash-list-hunter?page=0&size=5";
     }
 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.*;
 
 import java.util.*;
 
@@ -15,6 +16,7 @@ import java.util.*;
 @RequestMapping("/recompensas")
 public class RecompensaController {
 
+    private static final Logger log = LoggerFactory.getLogger(RecompensaController.class);
     private RecompensaService recompensaService;
 
     public RecompensaController(RecompensaService theRecompensaService){
@@ -52,9 +54,11 @@ public class RecompensaController {
     public String createRecompensa(@ModelAttribute("recompensa") @Valid RecompensaEntity recompensaEntity, BindingResult bindingResult) {
         System.out.println(recompensaEntity);
         if (bindingResult.hasErrors()) {
+            log.warn("Erros de validações encontrados no formulário: {}", bindingResult.getAllErrors());
             return "/recompensa/create-recompensa";
         } else {
             recompensaService.create(recompensaEntity);
+            log.info("Novo recompensa criada: {}", recompensaEntity);
             return "redirect:/recompensas/list?page=0&size=5";
         }
     }
@@ -73,10 +77,12 @@ public class RecompensaController {
     @PostMapping("/update-recompensa/{id}")
     public String updateRecompensa(@PathVariable("id") int id, @ModelAttribute("recompensa") @Valid RecompensaEntity recompensaEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
+            log.warn("Erros de validações encontrados no formulário: {}", bindingResult.getAllErrors());
             return "/recompensa/update-recompensa";
         } else {
             recompensaEntity.setId(id);
             recompensaService.update(recompensaEntity);
+            log.info("Alterando recompensa ID Nº{} com novas informações: {}", id, recompensaEntity);
             return "redirect:/recompensas/list?page=0&size=5";
         }
     }
@@ -84,6 +90,7 @@ public class RecompensaController {
     @GetMapping("/trash-recompensa/{id}")
     public String trashRecompensa(@PathVariable("id") int id) {
         recompensaService.trash(id);
+        log.info("Recompensa ID Nº{} foi enviada para a lixeira.", id);
         return "redirect:/recompensas/list?page=0&size=5";
     }
 
@@ -108,14 +115,16 @@ public class RecompensaController {
     }
 
     @GetMapping("/restore-recompensa/{id}")
-    public String restoreRecompensa(@PathVariable("id") int id, Model model) {
+    public String restoreRecompensa(@PathVariable("id") int id) {
         recompensaService.restore(id);
+        log.info("Recompensa ID Nº{} foi restaurada para a listagem principal.", id);
         return "redirect:/recompensas/trash-list-recompensa?page=0&size=5";
     }
 
     @GetMapping("/delete-recompensa/{id}")
     public String deleteRecompensa(@PathVariable("id") int id) {
         recompensaService.delete(id);
+        log.info("Recompensa ID Nº{} foi excluída permanentemente.", id);
         return "redirect:/recompensas/trash-list-recompensa?page=0&size=5";
     }
 

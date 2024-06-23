@@ -8,6 +8,7 @@ import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.*;
 
 import java.util.*;
 
@@ -15,6 +16,7 @@ import java.util.*;
 @RequestMapping("/recompensados")
 public class RecompensadoController {
 
+    private static final Logger log = LoggerFactory.getLogger(RecompensadoController.class);
     private RecompensadoService recompensadoService;
     private HunterService hunterService;
     private RecompensaService recompensaService;
@@ -89,9 +91,11 @@ public class RecompensadoController {
         model.addAttribute("hunter", hunterEntity);
         model.addAttribute("recompensa", recompensasDisponiveis);
         if (bindingResult.hasErrors()) {
+            log.warn("Erros de validações encontrados no formulário: {}", bindingResult.getAllErrors());
             return "/recompensado/create-recompensado";
         } else {
             recompensadoService.create(recompensadoEntity);
+            log.info("Novo recompensado(a) criado(a): {}", recompensadoEntity);
             return "redirect:/recompensados/list?page=0&size=5";
         }
     }
@@ -117,11 +121,7 @@ public class RecompensadoController {
         model.addAttribute("recompensado", recompensadoEntity);
         model.addAttribute("hunter", hunterEntity);
         model.addAttribute("recompensa", recompensasDisponiveis);
-        if (recompensadoEntity != null) {
-            return "/recompensado/update-recompensado";
-        } else {
-            return "redirect:/recompensados/list?page=0&size=5";
-        }
+        return recompensadoEntity != null ? "/recompensado/update-recompensado" : "redirect:/recompensados/list?page=0&size=5";
     }
 
     @PostMapping("/update-recompensados/{id}")
@@ -144,10 +144,12 @@ public class RecompensadoController {
         model.addAttribute("hunter", hunterEntity);
         model.addAttribute("recompensa", recompensasDisponiveis);
         if (bindingResult.hasErrors()) {
+            log.warn("Erros de validações encontrados no formulário: {}", bindingResult.getAllErrors());
             return "/recompensado/update-recompensado";
         } else {
             recompensadoEntity.setId(id);
             recompensadoService.update(recompensadoEntity);
+            log.info("Alterando recompensado(a) ID Nº{} com novas informações: {}", id, recompensadoEntity);
             return "redirect:/recompensados/list?page=0&size=5";
         }
     }
@@ -155,6 +157,7 @@ public class RecompensadoController {
     @GetMapping("/trash-recompensado/{id}")
     public String trashRecompensado(@PathVariable("id") int id) {
         recompensadoService.trash(id);
+        log.info("Recompensado(a) ID Nº{} foi enviado(a) para a lixeira.", id);
         return "redirect:/recompensados/list?page=0&size=5";
     }
 
@@ -179,14 +182,16 @@ public class RecompensadoController {
     }
 
     @GetMapping("/restore-recompensado/{id}")
-    public String restoreRecompensado(@PathVariable("id") int id, Model model) {
+    public String restoreRecompensado(@PathVariable("id") int id) {
         recompensadoService.restore(id);
+        log.info("Recompensado(a) ID Nº{} foi restaurado(a) para a listagem principal.", id);
         return "redirect:/recompensados/trash-list-recompensado?page=0&size=5";
     }
 
     @GetMapping("/delete-recompensado/{id}")
     public String deleteRecompensado(@PathVariable("id") int id) {
         recompensadoService.delete(id);
+        log.info("Recompensado(a) ID Nº{} foi excluído(a) permanentemente.", id);
         return "redirect:/recompensados/trash-list-recompensado?page=0&size=5";
     }
 
